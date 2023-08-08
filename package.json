@@ -19,6 +19,7 @@
     "@babel/core": "^7.22.10",
     "@babel/preset-env": "7.22.10",
     "babel-loader": "9.1.3",
+    "copy-webpack-plugin": "11.0.0",
     "eslint": "8.38.0",
     "eslint-config-htmlacademy": "9.0.0",
     "html-webpack-plugin": "5.5.3",
