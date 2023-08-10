@@ -1,6 +1,6 @@
 import { createElement } from '../render.js';
 
-function createEditFormTemplate() {
+function createWaypointEditTemplate() {
   return (
     `<li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
@@ -160,9 +160,9 @@ function createEditFormTemplate() {
   );
 }
 
-export default class EditFormView {
+export default class WaypointEditView {
   getTemplate() {
-    return createEditFormTemplate();
+    return createWaypointEditTemplate();
   }
 
   getElement() {
