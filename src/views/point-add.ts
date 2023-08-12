@@ -1,6 +1,6 @@
-import { createElement } from '../render.js';
+import AbstractView from './_abstract';
 
-function createWaypointAddTemplate() {
+function createPointAddTemplate() {
   return (
     `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
@@ -166,21 +166,13 @@ function createWaypointAddTemplate() {
   </li>`
   );
 }
-export default class WaypointAddView {
-  getTemplate() {
-    return createWaypointAddTemplate();
-  }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+export default class PointAddView extends AbstractView<HTMLElement> {
+	constructor() {
+		super();
+	}
 
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+	get template() {
+		return createPointAddTemplate();
+	}
 }
-

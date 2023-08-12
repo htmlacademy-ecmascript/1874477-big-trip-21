@@ -1,12 +1,16 @@
-const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
-const HtmlPlugin = require('html-webpack-plugin');
+import { dirname, resolve } from 'path';
+import CopyPlugin from 'copy-webpack-plugin';
+import HtmlPlugin from 'html-webpack-plugin';
+import { fileURLToPath } from 'url';
 
-module.exports = {
-  entry: './src/main.js',
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default {
+  entry: './src/main.ts',
   output: {
     filename: 'bundle.[contenthash].js',
-    path: path.resolve(__dirname, 'build'),
+    path: resolve(__dirname, 'build'),
     clean: true,
   },
   devtool: 'source-map',
@@ -25,6 +29,9 @@ module.exports = {
       ],
     }),
   ],
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
   module: {
     rules: [
       {
@@ -40,6 +47,11 @@ module.exports = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
       },
     ],
   },
