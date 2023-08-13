@@ -3,8 +3,18 @@ import { getBlankPoint, getDestinations } from '../point-mock';
 import { Point, Photo, Offer } from '../const';
 import { DATE_FORMATS } from '../utils';
 import dayjs from 'dayjs';
+import flatpickr from "flatpickr";
 
+// Не работает для input type text - Разобраться позже
+flatpickr("#event-start-time-1", {
+  dateFormat: "d/m/y H:i",
+  enableTime: true,
+});
 
+flatpickr("#event-end-time-1", {
+  dateFormat: "d/m/y H:i",
+  enableTime: true,
+});
 
 function createPointEditTemplate() {
   return (
@@ -160,10 +170,10 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateStart}"> <!-- 18/03/19 12:25-->
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateStart}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}"> <!-- 18/03/19 13:35 -->
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateEnd}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -181,7 +191,7 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
           </button>
         </header>
         <section class="event__details">
-          <!-- Если у точки есть доп. услуги - выводим их -->
+
           ${offersTemplate ? /*html*/`
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -191,13 +201,11 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
               </div>
             </section>` : ''}
 
-          <!-- Если у точки есть описание - показываем блок -->
           ${destination ? /*html*/`
             <section class="event__section  event__section--destination">
               <h3 class="event__section-title  event__section-title--destination">Destination</h3>
               <p class="event__destination-description">${destination.description}</p>
 
-              <!-- Вывод фотографий точки маршрута -->
               ${photosTemplate}
             </section>` : ''}
         </section>

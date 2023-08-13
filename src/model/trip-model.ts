@@ -6,7 +6,6 @@ export default class PointsModel {
   points = Array.from({length: POINTS_COUNT}, getRandomPoint);
 
   getPoints() {
-    console.log(this.points);
     return this.points;
   }
 }
