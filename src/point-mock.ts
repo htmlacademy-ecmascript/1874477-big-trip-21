@@ -1,16 +1,5 @@
 import { getRandomArrayElement } from './utils';
-
-const pointTypes = {
-  TAXI: 'Taxi',
-  BUS: 'Bus',
-  TRAIN: 'Train',
-  SHIP: 'Ship',
-  DRIVE: 'Drive',
-  FLIGHT: 'Flight',
-  CHECK_IN: 'Check-in',
-  SIGHTSEEING: 'Sightseeing',
-  RESTARAUNT: 'Restaurant'
-};
+import { pointTypes } from './const';
 
 const destinationDescriptions = [
   `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa amet dignissimos quae

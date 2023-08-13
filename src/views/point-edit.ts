@@ -1,33 +1,9 @@
 import AbstractView from './_abstract';
 import { getBlankPoint, getDestinations } from '../point-mock';
+import { Point, Photo, Offer } from '../const';
 import { DATE_FORMATS } from '../utils';
 import dayjs from 'dayjs';
 
-interface Point {
-  type: string;
-  destination: {
-    name: string;
-    photos: Photo[];
-    description: string;
-  };
-  dates: {
-    start?: Date;
-    end?: Date;
-  };
-  offers: Offer[];
-  cost: number;
-}
-
-interface Photo {
-  src: string;
-  alt: string;
-}
-
-interface Offer {
-  name: string;
-  cost: number;
-  checked: boolean;
-}
 
 
 function createPointEditTemplate() {
@@ -206,7 +182,7 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
         </header>
         <section class="event__details">
           <!-- Если у точки есть доп. услуги - выводим их -->
-          ${offersTemplate ? `
+          ${offersTemplate ? /*html*/`
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -216,7 +192,7 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
             </section>` : ''}
 
           <!-- Если у точки есть описание - показываем блок -->
-          ${destination ? `
+          ${destination ? /*html*/`
             <section class="event__section  event__section--destination">
               <h3 class="event__section-title  event__section-title--destination">Destination</h3>
               <p class="event__destination-description">${destination.description}</p>

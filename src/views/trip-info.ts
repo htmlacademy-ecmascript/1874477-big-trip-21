@@ -1,25 +1,49 @@
 import AbstractView from './_abstract';
+import dayjs from 'dayjs';
+import { DATE_FORMATS, formatCityNames } from '../utils';
 
-function createTripInfoTemplate() {
-	return `<section class="trip-main__trip-info  trip-info">
-	<div class="trip-info__main">
-		<h1 class="trip-info__title">Amsterdam &mdash; Chamonix &mdash; Geneva</h1>
+function createTripInfoTemplate(points: any[]) {
+  const totalPoints = points.length;
 
-		<p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
-	</div>
+  const cities = points.map(point => point.destination.name);
+  const tripTitle = formatCityNames(cities);
 
-	<p class="trip-info__cost">
-		Total: &euro;&nbsp;<span class="trip-info__cost-value">1230</span>
-	</p>
-</section>`;
+  let formattedStartDate = '';
+  let formattedEndDate = '';
+
+  if (totalPoints >= 1) {
+    const startDate = points[0].dates.start;
+    const endDate = points[totalPoints - 1].dates.end;
+    formattedStartDate = dayjs(startDate).format(DATE_FORMATS.TRIP_INFO);
+    formattedEndDate = dayjs(endDate).format(DATE_FORMATS.TRIP_INFO);
+  }
+
+  const tripDates = formattedStartDate && formattedEndDate ? `${formattedStartDate} — ${formattedEndDate}` : '';
+
+  const totalCost = totalPoints > 0 ? points.reduce((total, point) => total + point.cost, 0) : '';
+  const costHtml = totalCost !== '' ? `Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCost}</span>` : '';
+
+  return /*html*/`<section class="trip-main__trip-info  trip-info">
+    <div class="trip-info__main">
+      <h1 class="trip-info__title">${tripTitle}</h1>
+      <p class="trip-info__dates">${tripDates}</p>
+    </div>
+
+    <p class="trip-info__cost">
+      ${costHtml}
+    </p>
+  </section>`;
 }
 
 export default class TripInfoView extends AbstractView<HTMLElement> {
-	constructor() {
-		super();
-	}
+  private points: any[];
 
-	get template() {
-		return createTripInfoTemplate();
-	}
+  constructor(points: any[]) {
+    super();
+    this.points = points;
+  }
+
+  get template() {
+    return createTripInfoTemplate(this.points);
+  }
 }
