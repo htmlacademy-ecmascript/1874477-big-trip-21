@@ -5,8 +5,8 @@ import { DATE_FORMATS } from '../const';
 import dayjs from 'dayjs';
 
 function createPointEditTemplate() {
-  return (
-    /*html*/`<div class="event__type-item">
+	return (
+	/*html*/`<div class="event__type-item">
     <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
     <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
   </div>
@@ -51,20 +51,20 @@ function createPointEditTemplate() {
     <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
   </div>
        `
-  )
+	);
 }
 
 function createOffersTemplate(offers: Offer[]) {
-  if (!offers) {
-    return '';
-  }
+	if (!offers) {
+		return '';
+	}
 
-  return offers.map((offer) => {
-    const offerName = offer.name;
-    const loweredOfferName = offerName.toLowerCase();
-    const offerChecked = offer.checked;
+	return offers.map((offer) => {
+		const offerName = offer.name;
+		const loweredOfferName = offerName.toLowerCase();
+		const offerChecked = offer.checked;
 
-    return /*html*/`
+		return /*html*/`
       <div class="event__offer-selector">
         <input
           class="event__offer-checkbox visually-hidden"
@@ -80,21 +80,21 @@ function createOffersTemplate(offers: Offer[]) {
         </label>
       </div>
     `;
-  }).join('');
+	}).join('');
 }
 
 function createDestinationsTemplate(destinations: Point['destination'][]) {
-  return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
+	return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
 }
 
 function createPhotostemplate(photos: Photo[]) {
-  const photosArr = Array.isArray(photos) ? photos : [];
+	const photosArr = Array.isArray(photos) ? photos : [];
 
-  if (photosArr.length === 0) {
-    return '';
-  }
+	if (photosArr.length === 0) {
+		return '';
+	}
 
-  return /*html*/`
+	return /*html*/`
     <div class="event__photos-container">
       <div class="event__photos-tape">
         ${photosArr.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.alt}">`).join('')}
@@ -103,14 +103,14 @@ function createPhotostemplate(photos: Photo[]) {
 }
 
 function createEditPointTemplate({ type, destination, dates, offers, cost }: Point) {
-  const eventTypeTemplate = createPointEditTemplate();
-  const offersTemplate = createOffersTemplate(offers);
-  const destinationsTemplate = createDestinationsTemplate(getDestinations());
-  const photosTemplate = destination.photos ? createPhotostemplate(destination.photos) : '';
-  const dateStart = dates.start ? dayjs(dates.start).format(DATE_FORMATS.CHOSED_DATE) : '';
-  const dateEnd = dates.end ? dayjs(dates.end).format(DATE_FORMATS.CHOSED_DATE) : '';
+	const eventTypeTemplate = createPointEditTemplate();
+	const offersTemplate = createOffersTemplate(offers);
+	const destinationsTemplate = createDestinationsTemplate(getDestinations());
+	const photosTemplate = destination.photos ? createPhotostemplate(destination.photos) : '';
+	const dateStart = dates.start ? dayjs(dates.start).format(DATE_FORMATS.CHOSED_DATE) : '';
+	const dateEnd = dates.end ? dayjs(dates.end).format(DATE_FORMATS.CHOSED_DATE) : '';
 
-  return /*html*/`
+	return /*html*/`
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -182,20 +182,20 @@ function createEditPointTemplate({ type, destination, dates, offers, cost }: Poi
     </li>`;
 }
 export default class PointEditView extends AbstractView<HTMLElement> {
-  private templateData: Point;
+	private templateData: Point;
 
-  constructor(templateData = getBlankPoint()) {
-    super();
+	constructor(templateData = getBlankPoint()) {
+		super();
 
-    this.templateData = templateData;
-    this.element.innerHTML = this.generateHTML();
-  }
+		this.templateData = templateData;
+		this.element.innerHTML = this.generateHTML();
+	}
 
-  get template() {
-    return createEditPointTemplate(this.templateData);
-  }
+	get template() {
+		return createEditPointTemplate(this.templateData);
+	}
 
-  generateHTML() {
-    return this.template;
-  }
+	generateHTML() {
+		return this.template;
+	}
 }

@@ -2,35 +2,35 @@ import AbstractView from './_abstract';
 import dayjs from 'dayjs';
 import { DATE_FORMATS } from '../const';
 import { getFormattedDateDiff } from '../utils';
-import { Point, Offer, Dates } from '../types-ts';
+import { Point, Offer } from '../types-ts';
 
 function createOffersTemplate(offers: Offer[]): string {
-  if (!offers) {
-    return '';
-  }
+	if (!offers) {
+		return '';
+	}
 
-  return offers
-    .filter(offer => offer.checked)
-    .map(
-      offer => /*html*/`
+	return offers
+		.filter((offer) => offer.checked)
+		.map(
+			(offer) => /*html*/`
       <li class="event__offer">
         <span class="event__offer-title">${offer.name}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${offer.cost}</span>
       </li>`
-    )
-    .join('');
+		)
+		.join('');
 }
 
 function createPointTemplate({ type, destination, dates, offers, cost, isFavorite }: Point): string {
-  const offersTemplate = createOffersTemplate(offers);
-  const startDate = new Date(dates.start);
-  const endDate = new Date(dates.end);
-  const dateForPoint = dayjs(startDate).format(DATE_FORMATS.FOR_POINT);
-  const dateStart = dayjs(startDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
-  const dateEnd = dayjs(endDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
+	const offersTemplate = createOffersTemplate(offers);
+	const startDate = new Date(dates.start);
+	const endDate = new Date(dates.end);
+	const dateForPoint = dayjs(startDate).format(DATE_FORMATS.FOR_POINT);
+	const dateStart = dayjs(startDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
+	const dateEnd = dayjs(endDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
 
-  return /*html*/`
+	return /*html*/`
     <li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="${dateForPoint}">${dateForPoint}</time>
@@ -69,22 +69,22 @@ function createPointTemplate({ type, destination, dates, offers, cost, isFavorit
 }
 
 export default class PointView extends AbstractView<HTMLElement> {
-  private templateData: Point;
+	private templateData: Point;
 
-  constructor(templateData: Point) {
-    super();
+	constructor(templateData: Point) {
+		super();
 
-    this.templateData = templateData;
-    this.element.innerHTML = this.generateHTML();
-  }
+		this.templateData = templateData;
+		this.element.innerHTML = this.generateHTML();
+	}
 
-  get template() {
-    return createPointTemplate(this.templateData);
-  }
+	get template() {
+		return createPointTemplate(this.templateData);
+	}
 
-  generateHTML() {
-    return this.template;
-  }
+	generateHTML() {
+		return this.template;
+	}
 }
 
 

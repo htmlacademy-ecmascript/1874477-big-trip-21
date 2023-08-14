@@ -1,8 +1,8 @@
 import AbstractView from './_abstract';
 
 function createPointAddTemplate() {
-  return (
-    /*html*/`<li class="trip-events__item">
+	return (
+	/*html*/`<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
       <header class="event__header">
         <div class="event__type-wrapper">
@@ -164,7 +164,7 @@ function createPointAddTemplate() {
       </section>
     </form>
   </li>`
-  );
+	);
 }
 
 export default class PointAddView extends AbstractView<HTMLElement> {

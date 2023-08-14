@@ -1,12 +1,3 @@
-interface Point {
-  type: string;
-  destination: Destination;
-  dates: Dates;
-  offers: Offer[];
-  cost: number;
-  isFavorite: boolean;
-}
-
 interface Destination {
   name: string;
   description: string;
@@ -31,5 +22,13 @@ interface Photo {
   src: string;
   alt: string;
 }
+interface Point {
+  type: string;
+  destination: Destination;
+  dates: Dates;
+  offers: Offer[];
+  cost: number;
+  isFavorite: boolean;
+}
 
-export { Point, Destination, Dates, Offer, Photo }
+export { Point, Dates, Offer, Photo };
