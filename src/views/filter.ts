@@ -1,9 +1,8 @@
-import { createElement } from '../render.js';
+import AbstractView from './_abstract';
 
 function createFilterTemplate() {
-  return (
-    `
-      <form class="trip-filters" action="#" method="get">
+	return (
+	/*html*/`<form class="trip-filters" action="#" method="get">
         <div class="trip-filters__filter">
           <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything">
           <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
@@ -28,22 +27,14 @@ function createFilterTemplate() {
       </form>
     </div>
   </div>`
-  );
+	);
 }
-export default class FilterView {
-  getTemplate() {
-    return createFilterTemplate();
-  }
+export default class FilterView extends AbstractView<HTMLElement> {
+	constructor() {
+		super();
+	}
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+	get template() {
+		return createFilterTemplate();
+	}
 }
