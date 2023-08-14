@@ -1,17 +1,8 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { DATE_FORMATS } from './const';
 
 dayjs.extend(duration);
-
-const DATE_FORMATS = {
-  CHOSED_DATE: 'DD/MM/YY HH:mm',
-  FOR_POINT_PERIODS: 'HH:mm',
-  FOR_POINT: 'MMM DD',
-  LESS_THAN_HOUR: 'mm',
-  LESS_THAN_DAY: 'HH mm',
-  MORE_THAN_DAY: 'DD HH mm',
-  TRIP_INFO: 'D MMM'
-};
 
 function getRandomArrayElement<T>(array: T[]): T {
   const randomIndex = Math.floor(Math.random() * array.length);
@@ -26,7 +17,7 @@ function getFormattedDateDiff(date1: Date, date2: Date): string {
   return filteredNums.join(' ');
 }
 
-function formatCityNames(cities: string[]) {
+function formattedCityNames(cities: string[]) {
   const validCities = cities.filter(city => city && city.trim() !== '');
   const numCities = validCities.length;
 
@@ -39,5 +30,5 @@ function formatCityNames(cities: string[]) {
     : `${validCities[0]} — ${validCities[numCities - 1]}`;
 }
 
-export { getRandomArrayElement, getFormattedDateDiff, DATE_FORMATS , formatCityNames };
+export { getRandomArrayElement, getFormattedDateDiff , formattedCityNames };
 

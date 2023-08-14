@@ -5,6 +5,7 @@ import PointView from '../views/point';
 import EventListView from '../views/trip-list';
 import PointEditView from '../views/point-edit';
 import PointsModel from '../model/trip-model';
+import { Point } from '../types-ts';
 import { render } from '../render';
 
 const headerTripElement = document.querySelector('.trip-main');
@@ -13,16 +14,15 @@ export default class BoardPresenter {
   boardComponent = new EventListView();
   boardContainer: HTMLElement;
   pointsModel: PointsModel;
-  points: any[] = [];
+  points: Point[];
 
   constructor({ boardContainer, pointsModel }: { boardContainer: HTMLElement, pointsModel: PointsModel }) {
     this.boardContainer = boardContainer;
     this.pointsModel = pointsModel;
+    this.points = [...this.pointsModel.getPoints()];
   }
 
   init() {
-    this.points = [...this.pointsModel.getPoints()];
-
     render(new SortView(), this.boardContainer);
     render(this.boardComponent, this.boardContainer);
     render(new PointEditView(this.points[0]), this.boardComponent.element);
@@ -32,11 +32,11 @@ export default class BoardPresenter {
     }
 
     if (headerTripElement && headerFilterElement) {
-    const tripInfoView = new TripInfoView(this.points);
-    render(tripInfoView, headerTripElement, 'afterbegin');
+      const tripInfoView = new TripInfoView(this.points);
+      render(tripInfoView, headerTripElement, 'afterbegin');
 
-    const filterView = new FilterView();
-    render(filterView, headerFilterElement);
+      const filterView = new FilterView();
+      render(filterView, headerFilterElement);
+    }
   }
-}
 }

@@ -1,30 +1,8 @@
 import AbstractView from './_abstract';
 import dayjs from 'dayjs';
-import { getFormattedDateDiff, DATE_FORMATS } from '../utils';
-
-interface Offer {
-  checked: boolean;
-  name: string;
-  cost: number;
-}
-
-interface Point {
-  type: string;
-  destination: Destination;
-  dates: Dates;
-  offers: Offer[];
-  cost: number;
-  isFavorite: boolean;
-}
-
-interface Destination {
-  name: string;
-}
-
-interface Dates {
-  start: string;
-  end: string;
-}
+import { DATE_FORMATS } from '../const';
+import { getFormattedDateDiff } from '../utils';
+import { Point, Offer, Dates } from '../types-ts';
 
 function createOffersTemplate(offers: Offer[]): string {
   if (!offers) {
@@ -44,8 +22,7 @@ function createOffersTemplate(offers: Offer[]): string {
     .join('');
 }
 
-function createPointTemplate(point: Point): string {
-  const { type, destination, dates, offers, cost, isFavorite } = point;
+function createPointTemplate({ type, destination, dates, offers, cost, isFavorite }: Point): string {
   const offersTemplate = createOffersTemplate(offers);
   const startDate = new Date(dates.start);
   const endDate = new Date(dates.end);

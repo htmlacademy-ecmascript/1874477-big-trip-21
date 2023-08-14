@@ -1,12 +1,13 @@
 import AbstractView from './_abstract';
 import dayjs from 'dayjs';
-import { DATE_FORMATS, formatCityNames } from '../utils';
+import { DATE_FORMATS } from '../const';
+import { formattedCityNames } from '../utils';
 
 function createTripInfoTemplate(points: any[]) {
   const totalPoints = points.length;
 
   const cities = points.map(point => point.destination.name);
-  const tripTitle = formatCityNames(cities);
+  const tripTitle = formattedCityNames(cities);
 
   let formattedStartDate = '';
   let formattedEndDate = '';

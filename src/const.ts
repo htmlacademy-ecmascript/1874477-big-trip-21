@@ -1,31 +1,14 @@
-interface Point {
-  type: string;
-  destination: {
-    name: string;
-    photos: Photo[];
-    description: string;
-  };
-  isFavorite: boolean;
-  dates: {
-    start?: string;
-    end?: string;
-  };
-  offers: Offer[];
-  cost: number;
-}
+const DATE_FORMATS = {
+  CHOSED_DATE: 'DD/MM/YY HH:mm',
+  FOR_POINT_PERIODS: 'HH:mm',
+  FOR_POINT: 'MMM DD',
+  LESS_THAN_HOUR: 'mm',
+  LESS_THAN_DAY: 'HH mm',
+  MORE_THAN_DAY: 'DD HH mm',
+  TRIP_INFO: 'D MMM'
+};
 
-interface Photo {
-  src: string;
-  alt: string;
-}
-
-interface Offer {
-  name: string;
-  cost: number;
-  checked: boolean;
-}
-
-const pointTypes = {
+const POINTS_TYPES = {
   TAXI: 'Taxi',
   BUS: 'Bus',
   TRAIN: 'Train',
@@ -37,5 +20,4 @@ const pointTypes = {
   RESTARAUNT: 'Restaurant'
 };
 
-
-export { Point, Photo, Offer, pointTypes }
+export { DATE_FORMATS, POINTS_TYPES }

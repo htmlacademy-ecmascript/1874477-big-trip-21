@@ -1,84 +1,56 @@
 import AbstractView from './_abstract';
 import { getBlankPoint, getDestinations } from '../point-mock';
-import { Point, Photo, Offer } from '../const';
-import { DATE_FORMATS } from '../utils';
+import { Point, Offer, Photo } from '../types-ts';
+import { DATE_FORMATS } from '../const';
 import dayjs from 'dayjs';
-import flatpickr from "flatpickr";
-
-// Не работает для input type text - Разобраться позже
-flatpickr("#event-start-time-1", {
-  dateFormat: "d/m/y H:i",
-  enableTime: true,
-});
-
-flatpickr("#event-end-time-1", {
-  dateFormat: "d/m/y H:i",
-  enableTime: true,
-});
 
 function createPointEditTemplate() {
   return (
-    /*html*/`<li class="trip-events__item">
-<form class="event event--edit" action="#" method="post">
-  <header class="event__header">
-    <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
-        <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
-      </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+    /*html*/`<div class="event__type-item">
+    <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
+    <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+  </div>
 
-      <div class="event__type-list">
-        <fieldset class="event__type-group">
-          <legend class="visually-hidden">Event type</legend>
+  <div class="event__type-item">
+    <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
+    <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
+    <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
+    <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
+    <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+    <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
+    <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-          </div>
+  <div class="event__type-item">
+    <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
+    <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+  </div>
 
-          <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-          </div>
-        </fieldset>
-      </div>
-    </div>`
+  <div class="event__type-item">
+    <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
+    <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+  </div>
+       `
   )
 }
 
@@ -118,7 +90,7 @@ function createDestinationsTemplate(destinations: Point['destination'][]) {
 function createPhotostemplate(photos: Photo[]) {
   const photosArr = Array.isArray(photos) ? photos : [];
 
-  if(photosArr.length === 0) {
+  if (photosArr.length === 0) {
     return '';
   }
 
@@ -130,7 +102,7 @@ function createPhotostemplate(photos: Photo[]) {
     </div>`;
 }
 
-function createEditPointTemplate({type, destination, dates, offers, cost}: Point) {
+function createEditPointTemplate({ type, destination, dates, offers, cost }: Point) {
   const eventTypeTemplate = createPointEditTemplate();
   const offersTemplate = createOffersTemplate(offers);
   const destinationsTemplate = createDestinationsTemplate(getDestinations());
@@ -152,7 +124,6 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
                 ${eventTypeTemplate}
               </fieldset>
             </div>
@@ -190,9 +161,8 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
+        ${offersTemplate ? /*html*/`
         <section class="event__details">
-
-          ${offersTemplate ? /*html*/`
             <section class="event__section  event__section--offers">
               <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
@@ -201,18 +171,16 @@ function createEditPointTemplate({type, destination, dates, offers, cost}: Point
               </div>
             </section>` : ''}
 
-          ${destination ? /*html*/`
+            ${destination && destination.description !== '' ? /*html*/`
             <section class="event__section  event__section--destination">
               <h3 class="event__section-title  event__section-title--destination">Destination</h3>
               <p class="event__destination-description">${destination.description}</p>
-
               ${photosTemplate}
             </section>` : ''}
         </section>
       </form>
     </li>`;
 }
-
 export default class PointEditView extends AbstractView<HTMLElement> {
   private templateData: Point;
 

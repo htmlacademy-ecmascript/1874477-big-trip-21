@@ -1,5 +1,6 @@
 import { getRandomArrayElement } from './utils';
-import { pointTypes } from './const';
+import { POINTS_TYPES } from './const';
+import { Point } from "./types-ts";
 
 const destinationDescriptions = [
   `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa amet dignissimos quae
@@ -60,7 +61,7 @@ const destinations = [
 ];
 
 const offers = {
-  [pointTypes.TAXI]: [
+  [POINTS_TYPES.TAXI]: [
     {
       name: 'Transfer',
       cost: 80,
@@ -73,7 +74,7 @@ const offers = {
     }
   ],
 
-  [pointTypes.FLIGHT]: [
+  [POINTS_TYPES.FLIGHT]: [
     {
       name: 'Extra Luggage',
       cost: 150,
@@ -81,7 +82,7 @@ const offers = {
     }
   ],
 
-  [pointTypes.CHECK_IN]: [
+  [POINTS_TYPES.CHECK_IN]: [
     {
       name: 'Lunch',
       cost: 320,
@@ -89,7 +90,7 @@ const offers = {
     },
   ],
 
-  [pointTypes.BUS]: [
+  [POINTS_TYPES.BUS]: [
     {
       name: 'Switch to comfort',
       cost: 80,
@@ -99,88 +100,92 @@ const offers = {
 };
 
 const NEW_BLANK_POINT = {
-  type: pointTypes.FLIGHT,
+  type: POINTS_TYPES.FLIGHT,
   destination: {
     name: '',
     description: '',
     photos: []
   },
   dates: {
-    start: undefined,
-    end: undefined
+    start: '',
+    end: ''
   },
   offers: [],
   cost: 0,
   isFavorite: false,
 };
 
-const mockWayPoints = [
+const mockWayPoints: Point[] = [
   {
-    type: pointTypes.FLIGHT,
+    type: POINTS_TYPES.FLIGHT,
     destination: destinations[3],
     dates: {
       start: '2019-03-18T10:30',
       end: '2019-03-20T10:50'
     },
-    offers: offers[pointTypes.FLIGHT],
+    offers: offers[POINTS_TYPES.FLIGHT],
     cost: 5000,
     isFavorite: true,
   },
 
   {
-    type: pointTypes.SHIP,
-    destination: '',
+    type: POINTS_TYPES.SHIP,
+    destination: {
+      name: '',
+      description: '',
+      photos: []
+    },
     dates: {
       start: '2023-08-10T10:30',
       end: '2023-08-10T14:00'
     },
-    offers: offers[pointTypes.SHIP],
+    offers: offers[POINTS_TYPES.SHIP],
     cost: 1000,
     isFavorite: false,
   },
 
   {
-    type: pointTypes.CHECK_IN,
+    type: POINTS_TYPES.CHECK_IN,
     destination: destinations[0],
     dates: {
       start: '2023-02-01T03:04',
       end: '2023-10-01T17:30'
     },
-    offers: offers[pointTypes.CHECK_IN],
+    offers: offers[POINTS_TYPES.CHECK_IN],
     cost: 400,
     isFavorite: false,
   },
 
   {
-    type: pointTypes.TAXI,
+    type: POINTS_TYPES.TAXI,
     destination: destinations[1],
     dates: {
       start: '2023-11-25T05:03',
       end: '2023-09-20T13:17'
     },
-    offers: offers[pointTypes.TAXI],
+    offers: offers[POINTS_TYPES.TAXI],
     cost: 800,
     isFavorite: false,
   },
 
   {
-    type: pointTypes.BUS,
+    type: POINTS_TYPES.BUS,
     destination: destinations[2],
     dates: {
       start: '2023-07-24T00:22',
       end: '2023-08-11T09:20'
     },
-    offers: offers[pointTypes.BUS],
+    offers: offers[POINTS_TYPES.BUS],
     cost: 450,
     isFavorite: false,
   },
 ];
 
-function getBlankPoint() {
+function getBlankPoint(): Point {
   return NEW_BLANK_POINT;
 }
 
-function getRandomPoint() {
+function getRandomPoint(): Point {
   return getRandomArrayElement(mockWayPoints);
 }
 
