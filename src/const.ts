@@ -1,14 +1,4 @@
-const DATE_FORMATS = {
-	CHOSED_DATE: 'DD/MM/YY HH:mm',
-	FOR_POINT_PERIODS: 'HH:mm',
-	FOR_POINT: 'MMM DD',
-	LESS_THAN_HOUR: 'mm',
-	LESS_THAN_DAY: 'HH mm',
-	MORE_THAN_DAY: 'DD HH mm',
-	TRIP_INFO: 'D MMM'
-};
-
-const POINTS_TYPES = {
+const PointType = {
 	TAXI: 'Taxi',
 	BUS: 'Bus',
 	TRAIN: 'Train',
@@ -20,4 +10,4 @@ const POINTS_TYPES = {
 	RESTARAUNT: 'Restaurant'
 };
 
-export { DATE_FORMATS, POINTS_TYPES };
+export { PointType };

@@ -1,5 +1,5 @@
 import { getRandomArrayElement } from './utils';
-import { POINTS_TYPES } from './const';
+import { PointType } from './const';
 import { Point } from './types-ts';
 
 const destinationDescriptions = [
@@ -61,7 +61,7 @@ const destinations = [
 ];
 
 const offers = {
-	[POINTS_TYPES.TAXI]: [
+	[PointType.TAXI]: [
 		{
 			name: 'Transfer',
 			cost: 80,
@@ -74,7 +74,7 @@ const offers = {
 		}
 	],
 
-	[POINTS_TYPES.FLIGHT]: [
+	[PointType.FLIGHT]: [
 		{
 			name: 'Extra Luggage',
 			cost: 150,
@@ -82,7 +82,7 @@ const offers = {
 		}
 	],
 
-	[POINTS_TYPES.CHECK_IN]: [
+	[PointType.CHECK_IN]: [
 		{
 			name: 'Lunch',
 			cost: 320,
@@ -90,7 +90,7 @@ const offers = {
 		},
 	],
 
-	[POINTS_TYPES.BUS]: [
+	[PointType.BUS]: [
 		{
 			name: 'Switch to comfort',
 			cost: 80,
@@ -100,7 +100,7 @@ const offers = {
 };
 
 const NEW_BLANK_POINT = {
-	type: POINTS_TYPES.FLIGHT,
+	type: PointType.FLIGHT,
 	destination: {
 		name: '',
 		description: '',
@@ -117,19 +117,19 @@ const NEW_BLANK_POINT = {
 
 const mockWayPoints: Point[] = [
 	{
-		type: POINTS_TYPES.FLIGHT,
+		type: PointType.FLIGHT,
 		destination: destinations[3],
 		dates: {
 			start: '2019-03-18T10:30',
 			end: '2019-03-20T10:50'
 		},
-		offers: offers[POINTS_TYPES.FLIGHT],
+		offers: offers[PointType.FLIGHT],
 		cost: 5000,
 		isFavorite: true,
 	},
 
 	{
-		type: POINTS_TYPES.SHIP,
+		type: PointType.SHIP,
 		destination: {
 			name: '',
 			description: '',
@@ -139,43 +139,43 @@ const mockWayPoints: Point[] = [
 			start: '2023-08-10T10:30',
 			end: '2023-08-10T14:00'
 		},
-		offers: offers[POINTS_TYPES.SHIP],
+		offers: offers[PointType.SHIP],
 		cost: 1000,
 		isFavorite: false,
 	},
 
 	{
-		type: POINTS_TYPES.CHECK_IN,
+		type: PointType.CHECK_IN,
 		destination: destinations[0],
 		dates: {
 			start: '2023-02-01T03:04',
 			end: '2023-10-01T17:30'
 		},
-		offers: offers[POINTS_TYPES.CHECK_IN],
+		offers: offers[PointType.CHECK_IN],
 		cost: 400,
 		isFavorite: false,
 	},
 
 	{
-		type: POINTS_TYPES.TAXI,
+		type: PointType.TAXI,
 		destination: destinations[1],
 		dates: {
 			start: '2023-11-25T05:03',
 			end: '2023-09-20T13:17'
 		},
-		offers: offers[POINTS_TYPES.TAXI],
+		offers: offers[PointType.TAXI],
 		cost: 800,
 		isFavorite: false,
 	},
 
 	{
-		type: POINTS_TYPES.BUS,
+		type: PointType.BUS,
 		destination: destinations[2],
 		dates: {
 			start: '2023-07-24T00:22',
 			end: '2023-08-11T09:20'
 		},
-		offers: offers[POINTS_TYPES.BUS],
+		offers: offers[PointType.BUS],
 		cost: 450,
 		isFavorite: false,
 	},
@@ -194,4 +194,4 @@ function getDestinations() {
 }
 
 
-export {getBlankPoint, getRandomPoint, getDestinations};
+export { getBlankPoint, getRandomPoint, getDestinations };

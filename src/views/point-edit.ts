@@ -1,7 +1,6 @@
 import AbstractView from './_abstract';
 import { getBlankPoint, getDestinations } from '../point-mock';
 import { Point, Offer, Photo } from '../types-ts';
-import { DATE_FORMATS } from '../const';
 import dayjs from 'dayjs';
 
 function createPointEditTemplate() {
@@ -107,8 +106,8 @@ function createEditPointTemplate({ type, destination, dates, offers, cost }: Poi
 	const offersTemplate = createOffersTemplate(offers);
 	const destinationsTemplate = createDestinationsTemplate(getDestinations());
 	const photosTemplate = destination.photos ? createPhotostemplate(destination.photos) : '';
-	const dateStart = dates.start ? dayjs(dates.start).format(DATE_FORMATS.CHOSED_DATE) : '';
-	const dateEnd = dates.end ? dayjs(dates.end).format(DATE_FORMATS.CHOSED_DATE) : '';
+	const dateStart = dates.start ? dayjs(dates.start).format('DD/MM/YY HH:mm') : '';
+	const dateEnd = dates.end ? dayjs(dates.end).format('DD/MM/YY HH:mm') : '';
 
 	return /*html*/`
     <li class="trip-events__item">

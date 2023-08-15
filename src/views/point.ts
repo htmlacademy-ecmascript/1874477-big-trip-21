@@ -1,6 +1,5 @@
 import AbstractView from './_abstract';
 import dayjs from 'dayjs';
-import { DATE_FORMATS } from '../const';
 import { getFormattedDateDiff } from '../utils';
 import { Point, Offer } from '../types-ts';
 
@@ -26,9 +25,9 @@ function createPointTemplate({ type, destination, dates, offers, cost, isFavorit
 	const offersTemplate = createOffersTemplate(offers);
 	const startDate = new Date(dates.start);
 	const endDate = new Date(dates.end);
-	const dateForPoint = dayjs(startDate).format(DATE_FORMATS.FOR_POINT);
-	const dateStart = dayjs(startDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
-	const dateEnd = dayjs(endDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
+	const dateForPoint = dayjs(startDate).format('MMM DD');
+	const dateStart = dayjs(startDate).format('HH:mm');
+	const dateEnd = dayjs(endDate).format('HH:mm');
 
 	return /*html*/`
     <li class="trip-events__item">

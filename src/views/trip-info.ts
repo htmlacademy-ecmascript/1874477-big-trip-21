@@ -1,6 +1,5 @@
 import AbstractView from './_abstract';
 import dayjs from 'dayjs';
-import { DATE_FORMATS } from '../const';
 import { Point } from '../types-ts';
 import { formattedCityNames } from '../utils';
 
@@ -16,8 +15,8 @@ function createTripInfoTemplate(points: Point[]) {
 	if (totalPoints >= 1) {
 		const startDate = points[0].dates.start;
 		const endDate = points[totalPoints - 1].dates.end;
-		formattedStartDate = dayjs(startDate).format(DATE_FORMATS.TRIP_INFO);
-		formattedEndDate = dayjs(endDate).format(DATE_FORMATS.TRIP_INFO);
+		formattedStartDate = dayjs(startDate).format('D MMM');
+		formattedEndDate = dayjs(endDate).format('D MMM');
 	}
 
 	const tripDates = formattedStartDate && formattedEndDate ? `${formattedStartDate} — ${formattedEndDate}` : '';
