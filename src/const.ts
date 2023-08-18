@@ -1,13 +1,3 @@
-const PointType = {
-	TAXI: 'Taxi',
-	BUS: 'Bus',
-	TRAIN: 'Train',
-	SHIP: 'Ship',
-	DRIVE: 'Drive',
-	FLIGHT: 'Flight',
-	CHECK_IN: 'Check-in',
-	SIGHTSEEING: 'Sightseeing',
-	RESTARAUNT: 'Restaurant'
-};
+const PointType = ['Taxi','Bus','Train','Ship','Drive','Flight','Check-in','Sightseeing','Restaurant'];
 
 export { PointType };

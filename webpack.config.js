@@ -7,52 +7,52 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  entry: './src/main.ts',
-  output: {
-    filename: 'bundle.[contenthash].js',
-    path: resolve(__dirname, 'build'),
-    clean: true,
-  },
-  devtool: 'source-map',
-  plugins: [
-    new HtmlPlugin({
-      template: 'public/index.html',
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'public',
-          globOptions: {
-            ignore: ['**/index.html'],
-          },
-        },
-      ],
-    }),
-  ],
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env']
-          },
-        },
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.tsx?$/,
-        exclude: /node_modules/,
-        use: 'ts-loader',
-      },
-    ],
-  },
+	entry: './src/main.ts',
+	output: {
+		filename: 'bundle.[contenthash].js',
+		path: resolve(__dirname, 'build'),
+		clean: true,
+	},
+	devtool: 'source-map',
+	plugins: [
+		new HtmlPlugin({
+			template: 'public/index.html',
+		}),
+		new CopyPlugin({
+			patterns: [
+				{
+					from: 'public',
+					globOptions: {
+						ignore: ['**/index.html'],
+					},
+				},
+			],
+		}),
+	],
+	resolve: {
+		extensions: ['.tsx', '.ts', '.js'],
+	},
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /(node_modules)/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						presets: ['@babel/preset-env']
+					},
+				},
+			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader']
+			},
+			{
+				test: /\.tsx?$/,
+				exclude: /node_modules/,
+				use: 'ts-loader',
+			},
+		],
+	},
 };

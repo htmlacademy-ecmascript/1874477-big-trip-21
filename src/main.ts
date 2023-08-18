@@ -1,9 +1,9 @@
-import BoardPresenter from './presenter/board-presenter';
-import PointsModel from './model/trip-model';
+import TripPresenter from './presenter/trip';
+import PointsModel from './model/trip';
 
 const tripContainer = document.querySelector('.trip-events') as HTMLElement;
 
 const pointsModel = new PointsModel();
-const boardPresenter = new BoardPresenter({ boardContainer: tripContainer, pointsModel });
-boardPresenter.init();
+const tripPresenter = new TripPresenter({ tripContainer: tripContainer, pointsModel });
+tripPresenter.init();
 

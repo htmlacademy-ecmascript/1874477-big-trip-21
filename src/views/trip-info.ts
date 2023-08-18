@@ -1,4 +1,4 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
 import { Point } from '../types-ts';
 import { formattedCityNames } from '../utils';
@@ -13,8 +13,8 @@ function createTripInfoTemplate(points: Point[]) {
 	let formattedEndDate = '';
 
 	if (totalPoints >= 1) {
-		const startDate = points[0].dates.start;
-		const endDate = points[totalPoints - 1].dates.end;
+		const startDate = points[0].dateFrom;
+		const endDate = points[totalPoints - 1].dateTo;
 		formattedStartDate = dayjs(startDate).format('D MMM');
 		formattedEndDate = dayjs(endDate).format('D MMM');
 	}
@@ -37,14 +37,14 @@ function createTripInfoTemplate(points: Point[]) {
 }
 
 export default class TripInfoView extends AbstractView<HTMLElement> {
-	private points: Point[];
+	#points: Point[];
 
 	constructor(points: Point[]) {
 		super();
-		this.points = points;
+		this.#points = points;
 	}
 
 	get template() {
-		return createTripInfoTemplate(this.points);
+		return createTripInfoTemplate(this.#points);
 	}
 }

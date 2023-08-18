@@ -1,4 +1,5 @@
 interface Destination {
+  id: string;
   name: string;
   description: string;
   photos: {
@@ -6,29 +7,30 @@ interface Destination {
     alt: string;
   }[]
 }
-
-interface Dates {
-  start: string;
-  end: string;
-}
-
 interface Offer {
+  id: string;
   checked: boolean;
   name: string;
   cost: number;
 }
+
+type Offers = {
+  [key: string]: Offer[];
+};
 
 interface Photo {
   src: string;
   alt: string;
 }
 interface Point {
+  id: string;
   type: string;
   destination: Destination;
-  dates: Dates;
+  dateFrom: string;
+  dateTo: string;
   offers: Offer[];
   cost: number;
   isFavorite: boolean;
 }
 
-export { Point, Dates, Offer, Photo };
+export { Point, Offer, Photo, Offers };

@@ -11,9 +11,9 @@ function getRandomArrayElement<T>(array: T[]): T {
 function getFormattedDateDiff(date1: Date, date2: Date): string {
 	const dateDiff = Math.abs(dayjs(date2).diff(date1));
 	const formattedDate = dayjs.duration(dateDiff).format('DD[D] HH[H] mm[M]');
-	const filteredNums = formattedDate.split(' ').filter((datePart) => !/^00/.test(datePart));
+	const filteredNum = formattedDate.split(' ').filter((datePart) => !/^00/.test(datePart));
 
-	return filteredNums.join(' ');
+	return filteredNum.join(' ');
 }
 
 function formattedCityNames(cities: string[]) {

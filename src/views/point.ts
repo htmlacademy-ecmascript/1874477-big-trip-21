@@ -1,4 +1,4 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
 import { getFormattedDateDiff } from '../utils';
 import { Point, Offer } from '../types-ts';
@@ -21,10 +21,10 @@ function createOffersTemplate(offers: Offer[]): string {
 		.join('');
 }
 
-function createPointTemplate({ type, destination, dates, offers, cost, isFavorite }: Point): string {
+function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost, isFavorite }: Point): string {
 	const offersTemplate = createOffersTemplate(offers);
-	const startDate = new Date(dates.start);
-	const endDate = new Date(dates.end);
+	const startDate = new Date(dateFrom);
+	const endDate = new Date(dateTo);
 	const dateForPoint = dayjs(startDate).format('MMM DD');
 	const dateStart = dayjs(startDate).format('HH:mm');
 	const dateEnd = dayjs(endDate).format('HH:mm');
@@ -68,22 +68,29 @@ function createPointTemplate({ type, destination, dates, offers, cost, isFavorit
 }
 
 export default class PointView extends AbstractView<HTMLElement> {
-	private templateData: Point;
+	#point: Point;
+	#handleEditClick: () => void;
 
-	constructor(templateData: Point) {
+	constructor({point, onEditClick} :{point: Point, onEditClick: () => void }) {
 		super();
 
-		this.templateData = templateData;
-		this.element.innerHTML = this.generateHTML();
+		this.#point = point;
+		this.#handleEditClick = onEditClick;
+
+		const pointEditButton = this.element.querySelector('.event__rollup-btn');
+		if(pointEditButton) {
+			pointEditButton.addEventListener('click', this.#editClickHandler);
+		}
 	}
 
 	get template() {
-		return createPointTemplate(this.templateData);
+		return createPointTemplate(this.#point);
 	}
 
-	generateHTML() {
-		return this.template;
-	}
+	#editClickHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleEditClick();
+	};
 }
 
 

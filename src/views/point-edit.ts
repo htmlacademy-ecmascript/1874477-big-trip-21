@@ -1,9 +1,9 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 import { getBlankPoint, getDestinations } from '../point-mock';
 import { Point, Offer, Photo } from '../types-ts';
 import dayjs from 'dayjs';
 
-function createPointEditTemplate() {
+function createTypesTemplate() {
 	return (
 	/*html*/`<div class="event__type-item">
     <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
@@ -54,25 +54,21 @@ function createPointEditTemplate() {
 }
 
 function createOffersTemplate(offers: Offer[]) {
-	if (!offers) {
-		return '';
-	}
-
 	return offers.map((offer) => {
 		const offerName = offer.name;
-		const loweredOfferName = offerName.toLowerCase();
+		const lowerOfferName = offerName.toLowerCase();
 		const offerChecked = offer.checked;
 
 		return /*html*/`
       <div class="event__offer-selector">
-        <input
-          class="event__offer-checkbox visually-hidden"
-          type="checkbox"
-          id="${loweredOfferName}"
-          name="${loweredOfferName}"
-          ${offerChecked}
-        >
-        <label class="event__offer-label" for="${loweredOfferName}">
+      <input
+      class="event__offer-checkbox visually-hidden"
+      type="checkbox"
+      id="${lowerOfferName}"
+      name="${lowerOfferName}"
+      ${offerChecked ? 'checked' : ''}
+    >
+        <label class="event__offer-label" for="${lowerOfferName}">
           <span class="event__offer-title">${offerName}</span>
           +
           €&nbsp;<span class="event__offer__price">${offer.cost}</span>
@@ -86,7 +82,7 @@ function createDestinationsTemplate(destinations: Point['destination'][]) {
 	return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
 }
 
-function createPhotostemplate(photos: Photo[]) {
+function createPhotosTemplate(photos: Photo[]) {
 	const photosArr = Array.isArray(photos) ? photos : [];
 
 	if (photosArr.length === 0) {
@@ -101,13 +97,13 @@ function createPhotostemplate(photos: Photo[]) {
     </div>`;
 }
 
-function createEditPointTemplate({ type, destination, dates, offers, cost }: Point) {
-	const eventTypeTemplate = createPointEditTemplate();
-	const offersTemplate = createOffersTemplate(offers);
+function createEditPointTemplate({ type, destination, dateFrom, dateTo, offers, cost }: Point) {
+	const eventTypeTemplate = createTypesTemplate();
+	const offersTemplate = offers ? createOffersTemplate(offers) : '';
 	const destinationsTemplate = createDestinationsTemplate(getDestinations());
-	const photosTemplate = destination.photos ? createPhotostemplate(destination.photos) : '';
-	const dateStart = dates.start ? dayjs(dates.start).format('DD/MM/YY HH:mm') : '';
-	const dateEnd = dates.end ? dayjs(dates.end).format('DD/MM/YY HH:mm') : '';
+	const photosTemplate = destination.photos ? createPhotosTemplate(destination.photos) : '';
+	const dateStart = dateFrom ? dayjs(dateFrom).format('DD/MM/YY HH:mm') : '';
+	const dateEnd = dateTo ? dayjs(dateTo).format('DD/MM/YY HH:mm') : '';
 
 	return /*html*/`
     <li class="trip-events__item">
@@ -180,21 +176,29 @@ function createEditPointTemplate({ type, destination, dates, offers, cost }: Poi
       </form>
     </li>`;
 }
+
+const blankPoint = getBlankPoint();
 export default class PointEditView extends AbstractView<HTMLElement> {
-	private templateData: Point;
+	#point: Point;
+	#handleFormSubmit: () => void;
 
-	constructor(templateData = getBlankPoint()) {
+	constructor({ point = blankPoint, onFormSubmit }: { point: Point, onFormSubmit: () => void }) {
 		super();
+		this.#point = point;
+		this.#handleFormSubmit = onFormSubmit;
 
-		this.templateData = templateData;
-		this.element.innerHTML = this.generateHTML();
+		const formElement = this.element.querySelector('form');
+		if (formElement) {
+			formElement.addEventListener('submit', this.#formSubmitHandler);
+		}
 	}
 
 	get template() {
-		return createEditPointTemplate(this.templateData);
+		return createEditPointTemplate(this.#point);
 	}
 
-	generateHTML() {
-		return this.template;
-	}
+	#formSubmitHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleFormSubmit();
+	};
 }

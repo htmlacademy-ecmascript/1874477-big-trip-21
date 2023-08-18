@@ -1,4 +1,4 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 
 function createFilterTemplate() {
 	return (
@@ -24,9 +24,7 @@ function createFilterTemplate() {
         </div>
 
         <button class="visually-hidden" type="submit">Accept filter</button>
-      </form>
-    </div>
-  </div>`
+      </form>`
 	);
 }
 export default class FilterView extends AbstractView<HTMLElement> {
