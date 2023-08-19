@@ -1,19 +1,10 @@
 interface ApiConfig {
 	url: string;
 	method: string;
-	body: string;
+	body: string | null;
 	headers: Headers;
 }
 
-interface ApiResponse {
-	status: number;
-	statusText: string;
-  ok: boolean;
-}
-
-/**
- * Класс для отправки запросов к серверу
- */
 export default class ApiService {
 	_endPoint: string;
 	_authorization: string;
@@ -48,8 +39,10 @@ export default class ApiService {
 		try {
 			ApiService.checkStatus(response);
 			return response;
-		} catch (err: unknown) {
-			ApiService.catchError(err);
+		} catch (err) {
+			if (err instanceof Error) {
+				ApiService.catchError(err);
+			}
 		}
 	}
 
@@ -66,7 +59,7 @@ export default class ApiService {
    * Метод для проверки ответа
    * @param {Response} response Объект ответа
    */
-	static checkStatus(response: ApiResponse) {
+	static checkStatus(response: Response) {
 		if (!response.ok) {
 			throw new Error(`${response.status}: ${response.statusText}`);
 		}
@@ -76,7 +69,7 @@ export default class ApiService {
    * Метод для обработки ошибок
    * @param {Error} err Объект ошибки
    */
-	static catchError(err: unknown) {
+	static catchError(err: Error) {
 		throw err;
 	}
 

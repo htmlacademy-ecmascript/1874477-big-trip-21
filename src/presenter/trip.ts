@@ -7,16 +7,16 @@ import PointsModel from '../model/trip';
 import { Point } from '../types-ts';
 import { render } from '../framework/render';
 
-const headerTripElement = document.querySelector('.trip-main');
-const headerFilterElement = document.querySelector('.trip-controls__filters');
+const headerTripElement = document.querySelector<HTMLDivElement>('.trip-main');
+const headerFilterElement = document.querySelector<HTMLDivElement>('.trip-controls__filters');
 
 export default class TripPresenter {
 	#tripComponent = new EventListView();
-	#tripContainer: HTMLElement;
+	#tripContainer: HTMLDivElement;
 	#pointsModel: PointsModel;
 	#points: Point[] = [];
 
-	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLElement, pointsModel: PointsModel }) {
+	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement, pointsModel: PointsModel }) {
 		this.#tripContainer = tripContainer;
 		this.#pointsModel = pointsModel;
 	}

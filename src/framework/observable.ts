@@ -1,4 +1,4 @@
-type observerCallback = (event: string, payload?: string) => void;
+type observerCallback = (event: unknown, payload?: unknown) => void;
 /**
  * Класс, реализующий паттерн Наблюдатель.
  */
@@ -27,7 +27,7 @@ export default class Observable {
    * @param {*} event Тип события
    * @param {*} payload Дополнительная информация
    */
-	_notify(event: string, payload: string) {
+	_notify(event: unknown, payload: unknown) {
 		this.#observers.forEach((observer) => observer(event, payload));
 	}
 }

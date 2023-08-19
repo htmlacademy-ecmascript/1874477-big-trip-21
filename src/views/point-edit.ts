@@ -181,15 +181,20 @@ const blankPoint = getBlankPoint();
 export default class PointEditView extends AbstractView<HTMLElement> {
 	#point: Point;
 	#handleFormSubmit: () => void;
+	#handleButtonClick: () => void;
+	#formButtonElement: HTMLElement;
 
-	constructor({ point = blankPoint, onFormSubmit }: { point: Point, onFormSubmit: () => void }) {
+	constructor({ point = blankPoint, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: () => void, onButtonClick: () => void }) {
 		super();
 		this.#point = point;
 		this.#handleFormSubmit = onFormSubmit;
+		this.#handleButtonClick = onButtonClick;
 
 		const formElement = this.element.querySelector('form');
-		if (formElement) {
+		this.#formButtonElement = this.element.querySelector('.event__rollup-btn')!;
+		if (formElement && this.#formButtonElement) {
 			formElement.addEventListener('submit', this.#formSubmitHandler);
+			this.#formButtonElement.addEventListener('click', this.#formButtonClickHandler);
 		}
 	}
 
@@ -200,5 +205,10 @@ export default class PointEditView extends AbstractView<HTMLElement> {
 	#formSubmitHandler = (evt: Event) => {
 		evt.preventDefault();
 		this.#handleFormSubmit();
+	};
+
+	#formButtonClickHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleButtonClick();
 	};
 }

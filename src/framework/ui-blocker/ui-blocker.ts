@@ -15,7 +15,7 @@ export default class UiBlocker {
 	#upperLimit: number;
 
 	/** @type {HTMLElement|null} Элемент, блокирующий интерфейс */
-	#element : HTMLElement;
+	#element : HTMLElement | null = null;
 
 	/** @type {number} Время вызова метода block */
 	#startTime: number = 0;
@@ -76,11 +76,11 @@ export default class UiBlocker {
 
 	/** Метод, добавляющий CSS-класс элементу */
 	#addClass = () => {
-		this.#element.classList.add('ui-blocker--on');
+		this.#element?.classList.add('ui-blocker--on');
 	};
 
 	/** Метод, убирающий CSS-класс с элемента */
 	#removeClass = () => {
-		this.#element.classList.remove('ui-blocker--on');
+		this.#element?.classList.remove('ui-blocker--on');
 	};
 }
