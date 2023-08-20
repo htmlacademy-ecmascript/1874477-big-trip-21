@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
 import { Point } from '../types-ts';
-import { formattedCityNames } from '../utils';
+import { formattedCityNames } from '../utils/common';
 
 function createTripInfoTemplate(points: Point[]) {
 	const totalPoints = points.length;

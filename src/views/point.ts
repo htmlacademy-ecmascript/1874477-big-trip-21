@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
-import { getFormattedDateDiff } from '../utils';
+import { getFormattedDateDiff } from '../utils/common';
 import { Point, Offer } from '../types-ts';
 
 function createOffersTemplate(offers: Offer[]): string {
@@ -70,17 +70,17 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost
 export default class PointView extends AbstractView<HTMLElement> {
 	#point: Point;
 	#handleEditClick: () => void;
+	#handleFavoriteClick: () => void;
 
-	constructor({point, onEditClick} :{point: Point, onEditClick: () => void }) {
+	constructor({ point, onEditClick, onFavoriteClick }: { point: Point, onEditClick: () => void, onFavoriteClick: () => void }) {
 		super();
 
 		this.#point = point;
 		this.#handleEditClick = onEditClick;
+		this.#handleFavoriteClick = onFavoriteClick;
 
-		const pointEditButton = this.element.querySelector('.event__rollup-btn');
-		if(pointEditButton) {
-			pointEditButton.addEventListener('click', this.#editClickHandler);
-		}
+		this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')!.addEventListener('click', this.#favoriteClickHandler);
 	}
 
 	get template() {
@@ -90,6 +90,11 @@ export default class PointView extends AbstractView<HTMLElement> {
 	#editClickHandler = (evt: Event) => {
 		evt.preventDefault();
 		this.#handleEditClick();
+	};
+
+	#favoriteClickHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleFavoriteClick();
 	};
 }
 

@@ -11,4 +11,8 @@ export default class TripListView extends AbstractView<HTMLDivElement> {
 	get template() {
 		return TripListTemplate;
 	}
+
+	clearPointList() {
+		this.element.innerHTML = '';
+	}
 }

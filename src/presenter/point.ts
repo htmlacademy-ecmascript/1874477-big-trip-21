@@ -5,13 +5,11 @@ import { render, replace} from '../framework/render';
 
 export default class PointPresenter {
 	#pointContainer: HTMLElement;
-	#formButtonElement: HTMLButtonElement;
 	#pointComponent!: PointView;
 	#pointEditComponent!: PointEditView;
 
 	constructor(pointContainer: HTMLElement) {
 		this.#pointContainer = pointContainer;
-		this.#formButtonElement = document.querySelector('.event__rollup-btn')!;
 	}
 
 	renderPoint(point: Point) {
@@ -31,17 +29,14 @@ export default class PointPresenter {
 			}
 		};
 
-		const clickButtonHandler = (evt: Event) => {
-			evt.preventDefault();
-			replaceFormToPoint();
-			this.#formButtonElement.removeEventListener('click', clickButtonHandler);
-		};
-
 		this.#pointComponent = new PointView({
 			point,
 			onEditClick: () => {
 				replacePointToForm();
 				document.addEventListener('keydown', escKeyDownHandler);
+			},
+			onFavoriteClick: () => {
+
 			},
 		});
 
@@ -54,7 +49,6 @@ export default class PointPresenter {
 			onButtonClick: () => {
 				replaceFormToPoint();
 				document.removeEventListener('keydown', escKeyDownHandler);
-				document.removeEventListener('click', clickButtonHandler);
 			},
 		});
 

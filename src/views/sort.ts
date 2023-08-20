@@ -1,4 +1,7 @@
 import AbstractView from '../framework/view/abstract-view';
+import dayjs from 'dayjs';
+import { SortType } from '../const';
+import { Point } from '../types-ts';
 
 function createSortTemplate() {
 	return (
@@ -32,11 +35,49 @@ function createSortTemplate() {
 }
 
 export default class SortView extends AbstractView<HTMLElement> {
-	constructor() {
+	#sortType: string;
+	#points: Point[];
+	#sortedPoints: Point[];
+	#onSort: (sortedPoints: Point[]) => void;
+
+	constructor(points: Point[], onSort: (sortedPoints: Point[]) => void) {
 		super();
+		this.#sortType = SortType[0];
+		this.#onSort = onSort;
+		this.#points = [...points];
+		this.#sortedPoints = [...points];
+
+		const sortInputs = this.element.querySelectorAll('.trip-sort__input');
+		sortInputs.forEach((input) => {
+			input.addEventListener('change', this.handleSortChange);
+		});
 	}
 
 	get template() {
 		return createSortTemplate();
+	}
+
+	handleSortChange = (evt: Event) => {
+		const target = evt.target as HTMLInputElement;
+		this.#sortType = target.value;
+		this.sortPoints();
+		this.#onSort(this.#sortedPoints);
+	};
+
+	sortPoints() {
+		switch (this.#sortType) {
+			case SortType[0]:
+				this.#sortedPoints = this.#points.slice().sort((a, b) => a.cost - b.cost);
+				break;
+			case SortType[1]:
+				this.#sortedPoints = this.#points.slice().sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
+				break;
+			case SortType[2]:
+				this.#sortedPoints = this.#points.slice().sort(
+					(a, b) =>
+						dayjs(a.dateTo).diff(dayjs(a.dateFrom)) - dayjs(b.dateTo).diff(dayjs(b.dateFrom))
+				);
+				break;
+		}
 	}
 }

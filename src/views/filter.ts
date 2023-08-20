@@ -1,4 +1,7 @@
 import AbstractView from '../framework/view/abstract-view';
+import { Point } from '../types-ts';
+import { FilterType } from '../const';
+import dayjs from 'dayjs';
 
 function createFilterTemplate() {
 	return (
@@ -28,11 +31,56 @@ function createFilterTemplate() {
 	);
 }
 export default class FilterView extends AbstractView<HTMLElement> {
-	constructor() {
+	#filterType: string;
+	#points: Point[];
+	#filteredPoints: Point[];
+	#onFilter: (filteredPoints: Point[]) => void;
+
+	constructor(points: Point[], onFilter: (filteredPoints: Point[]) => void) {
 		super();
+		this.#filterType = FilterType[0];
+		this.#onFilter = onFilter;
+		this.#points = [...points];
+		this.#filteredPoints = [...points];
+
+		const filterInputs = this.element.querySelectorAll('.trip-filters__filter-input');
+		filterInputs.forEach((input) => {
+			input.addEventListener('change', this.handleFilterChange);
+		});
 	}
 
 	get template() {
 		return createFilterTemplate();
+	}
+
+	handleFilterChange = (evt: Event) => {
+		const target = evt.target as HTMLInputElement;
+		this.#filterType = target.value;
+		this.filterPoints();
+		this.#onFilter(this.#filteredPoints);
+	};
+
+
+	filterPoints() {
+		switch (this.#filterType) {
+			case FilterType[0]:
+				this.#filteredPoints = [...this.#points];
+				break;
+			case FilterType[1]:
+				this.#filteredPoints = this.#points.filter((point) =>
+					dayjs(point.dateFrom).isAfter(dayjs())
+				);
+				break;
+			case FilterType[2]:
+				this.#filteredPoints = this.#points.filter((point) =>
+					dayjs(point.dateFrom).isSame(dayjs()) || dayjs(point.dateTo).isAfter(dayjs())
+				);
+				break;
+			case FilterType[3]:
+				this.#filteredPoints = this.#points.filter((point) =>
+					dayjs(point.dateTo).isBefore(dayjs())
+				);
+				break;
+		}
 	}
 }

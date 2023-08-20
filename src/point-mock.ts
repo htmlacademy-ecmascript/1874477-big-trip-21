@@ -1,4 +1,4 @@
-import { getRandomArrayElement } from './utils';
+import { getRandomArrayElement } from './utils/utils';
 import { Point, Offers } from './types-ts';
 
 const destinationDescriptions = [
@@ -182,8 +182,8 @@ const mockWayPoints: Point[] = [
 		id: crypto.randomUUID(),
 		type: 'Flight',
 		destination: destinations[2],
-		dateFrom: '2019-03-18T10:30',
-		dateTo: '2019-03-20T10:50',
+		dateFrom: '2023-07-18T10:30',
+		dateTo: '2023-07-20T10:50',
 		offers: offers['Flight'],
 		cost: 5000,
 		isFavorite: true,
@@ -197,8 +197,8 @@ const mockWayPoints: Point[] = [
 			description: '',
 			photos: []
 		},
-		dateFrom: '2023-08-10T10:30',
-		dateTo: '2023-08-10T14:00',
+		dateFrom: '2023-10-10T10:30',
+		dateTo: '2023-10-10T14:00',
 		offers: offers['Ship'],
 		cost: 1000,
 		isFavorite: false,
@@ -207,8 +207,8 @@ const mockWayPoints: Point[] = [
 		id: crypto.randomUUID(),
 		type: 'Check-in',
 		destination: destinations[5],
-		dateFrom: '2023-02-01T03:04',
-		dateTo: '2023-10-01T17:30',
+		dateFrom: '2023-11-01T03:04',
+		dateTo: '2023-11-01T17:30',
 		offers: offers['Check-in'],
 		cost: 400,
 		isFavorite: false,
@@ -217,8 +217,8 @@ const mockWayPoints: Point[] = [
 		id: crypto.randomUUID(),
 		type: 'taxi',
 		destination: destinations[3],
-		dateFrom: '2023-11-25T05:03',
-		dateTo: '2023-09-20T13:17',
+		dateFrom: '2023-11-20T05:03',
+		dateTo: '2023-11-20T13:17',
 		offers: offers['taxi'],
 		cost: 800,
 		isFavorite: true,

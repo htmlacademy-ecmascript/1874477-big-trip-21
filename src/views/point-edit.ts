@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import { getBlankPoint, getDestinations } from '../point-mock';
+import { getDestinations } from '../point-mock';
 import { Point, Offer, Photo } from '../types-ts';
 import dayjs from 'dayjs';
 
@@ -177,25 +177,22 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, offers, 
     </li>`;
 }
 
-const blankPoint = getBlankPoint();
 export default class PointEditView extends AbstractView<HTMLElement> {
 	#point: Point;
 	#handleFormSubmit: () => void;
 	#handleButtonClick: () => void;
-	#formButtonElement: HTMLElement;
 
-	constructor({ point = blankPoint, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: () => void, onButtonClick: () => void }) {
+	constructor({ point, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: () => void, onButtonClick: () => void }) {
 		super();
 		this.#point = point;
 		this.#handleFormSubmit = onFormSubmit;
 		this.#handleButtonClick = onButtonClick;
 
-		const formElement = this.element.querySelector('form');
-		this.#formButtonElement = this.element.querySelector('.event__rollup-btn')!;
-		if (formElement && this.#formButtonElement) {
-			formElement.addEventListener('submit', this.#formSubmitHandler);
-			this.#formButtonElement.addEventListener('click', this.#formButtonClickHandler);
-		}
+		this.element.querySelector('form')!
+			.addEventListener('submit', this.#formSubmitHandler);
+		this.element.querySelector('.event__rollup-btn')!
+			.addEventListener('click', this.#formButtonClickHandler);
+
 	}
 
 	get template() {
