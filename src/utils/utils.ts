@@ -3,5 +3,9 @@ function getRandomArrayElement<T>(array: T[]): T {
 	return array[randomIndex];
 }
 
-export { getRandomArrayElement };
+function capitalizeFirstLetter(str: string):string {
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export { getRandomArrayElement, capitalizeFirstLetter };
 

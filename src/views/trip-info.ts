@@ -21,7 +21,11 @@ function createTripInfoTemplate(points: Point[]) {
 
 	const tripDates = formattedStartDate && formattedEndDate ? `${formattedStartDate} — ${formattedEndDate}` : '';
 
-	const totalCost = totalPoints > 0 ? points.reduce((total, point) => total + point.cost, 0) : '';
+	const totalCost = totalPoints > 0 ? points.reduce((total, point) => {
+		const offersCost = point.offers?.filter((offer) => offer.checked)?.reduce((subtotal, offer) =>
+			subtotal + offer.cost, 0) ?? 0;
+		return total + point.cost + offersCost;
+	}, 0) : '';
 	const costHtml = totalCost !== '' ? `Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCost}</span>` : '';
 
 	return /*html*/`<section class="trip-main__trip-info  trip-info">

@@ -48,7 +48,6 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${cost}</span>
         </p>
-        <!-- Если у точки есть доп. услуги - выводим их -->
         ${offersTemplate ? `
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
