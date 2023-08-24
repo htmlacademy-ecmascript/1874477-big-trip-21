@@ -1,7 +1,6 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
-import { DATE_FORMATS } from '../const';
-import { getFormattedDateDiff } from '../utils';
+import { getFormattedDateDiff } from '../utils/common';
 import { Point, Offer } from '../types-ts';
 
 function createOffersTemplate(offers: Offer[]): string {
@@ -22,13 +21,13 @@ function createOffersTemplate(offers: Offer[]): string {
 		.join('');
 }
 
-function createPointTemplate({ type, destination, dates, offers, cost, isFavorite }: Point): string {
+function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost, isFavorite }: Point): string {
 	const offersTemplate = createOffersTemplate(offers);
-	const startDate = new Date(dates.start);
-	const endDate = new Date(dates.end);
-	const dateForPoint = dayjs(startDate).format(DATE_FORMATS.FOR_POINT);
-	const dateStart = dayjs(startDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
-	const dateEnd = dayjs(endDate).format(DATE_FORMATS.FOR_POINT_PERIODS);
+	const startDate = new Date(dateFrom);
+	const endDate = new Date(dateTo);
+	const dateForPoint = dayjs(startDate).format('MMM DD');
+	const dateStart = dayjs(startDate).format('HH:mm');
+	const dateEnd = dayjs(endDate).format('HH:mm');
 
 	return /*html*/`
     <li class="trip-events__item">
@@ -49,7 +48,6 @@ function createPointTemplate({ type, destination, dates, offers, cost, isFavorit
         <p class="event__price">
           &euro;&nbsp;<span class="event__price-value">${cost}</span>
         </p>
-        <!-- Если у точки есть доп. услуги - выводим их -->
         ${offersTemplate ? `
           <h4 class="visually-hidden">Offers:</h4>
           <ul class="event__selected-offers">
@@ -69,22 +67,37 @@ function createPointTemplate({ type, destination, dates, offers, cost, isFavorit
 }
 
 export default class PointView extends AbstractView<HTMLElement> {
-	private templateData: Point;
+	#point: Point;
+	#handleEditClick: () => void;
+	#handleFavoriteClick: () => void;
 
-	constructor(templateData: Point) {
+	constructor({ point, onEditClick, onFavoriteClick }: { point: Point, onEditClick: () => void, onFavoriteClick: () => void }) {
 		super();
 
-		this.templateData = templateData;
-		this.element.innerHTML = this.generateHTML();
+		this.#point = point;
+		this.#handleEditClick = onEditClick;
+		this.#handleFavoriteClick = onFavoriteClick;
+
+		this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__favorite-btn')!.addEventListener('click', this.#favoriteClickHandler);
 	}
 
 	get template() {
-		return createPointTemplate(this.templateData);
+		return createPointTemplate(this.#point);
 	}
 
-	generateHTML() {
-		return this.template;
+	#editClickHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleEditClick();
+	};
+
+	#favoriteClickHandler = (evt: Event) => {
+		evt.preventDefault();
+		this.#handleFavoriteClick();
+	};
+
+	removePoints() {
+		this.element.remove();
 	}
 }
-
 

@@ -1,23 +1,7 @@
-const DATE_FORMATS = {
-	CHOSED_DATE: 'DD/MM/YY HH:mm',
-	FOR_POINT_PERIODS: 'HH:mm',
-	FOR_POINT: 'MMM DD',
-	LESS_THAN_HOUR: 'mm',
-	LESS_THAN_DAY: 'HH mm',
-	MORE_THAN_DAY: 'DD HH mm',
-	TRIP_INFO: 'D MMM'
-};
+const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'] as const;
+const FILTER_TYPES = ['everything', 'future', 'present', 'past'] as const;
+const SORT_TYPES = ['sort-price', 'sort-time', 'sort-day'] as const;
+const EMPTY_MESSAGES = ['Click New Event to create your first point', 'There are no past events now',
+	'There are no present events now', 'There are no future events now'] as const;
 
-const POINTS_TYPES = {
-	TAXI: 'Taxi',
-	BUS: 'Bus',
-	TRAIN: 'Train',
-	SHIP: 'Ship',
-	DRIVE: 'Drive',
-	FLIGHT: 'Flight',
-	CHECK_IN: 'Check-in',
-	SIGHTSEEING: 'Sightseeing',
-	RESTARAUNT: 'Restaurant'
-};
-
-export { DATE_FORMATS, POINTS_TYPES };
+export { POINT_TYPES, FILTER_TYPES, EMPTY_MESSAGES, SORT_TYPES };

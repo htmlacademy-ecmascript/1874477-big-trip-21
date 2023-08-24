@@ -1,9 +1,14 @@
 import { createElement } from '../render';
+import './abstract-view.css';
 
-/**
- * Abstract class for views
- */
-export default class AbstractView<El extends HTMLElement = HTMLElement> {
+type shakeCallback = () => void;
+
+const enum SnakeAnimation {
+      CLASS_NAME = 'shake',
+      ANIMATION_TIMEOUT = 600,
+}
+
+export default class AbstractView<El extends Element = HTMLDivElement> {
 	#element: El | null = null;
 
 	constructor() {
@@ -20,10 +25,7 @@ export default class AbstractView<El extends HTMLElement = HTMLElement> {
 		return this.#element;
 	}
 
-	/**
-	 * @abstract getter for template
-	 * @returns markup string
-	 */
+
 	get template(): string {
 		throw new Error('Abstract method not implemented: get template');
 	}
@@ -31,4 +33,13 @@ export default class AbstractView<El extends HTMLElement = HTMLElement> {
 	removeElement() {
 		this.#element = null;
 	}
+
+	shake(callback: shakeCallback) {
+		this.element.classList.add(SnakeAnimation.CLASS_NAME);
+		setTimeout(() => {
+			this.element.classList.remove(SnakeAnimation.CLASS_NAME);
+			callback?.();
+		}, SnakeAnimation.ANIMATION_TIMEOUT);
+	}
 }
+

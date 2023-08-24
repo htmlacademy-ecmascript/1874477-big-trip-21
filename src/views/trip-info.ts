@@ -1,8 +1,7 @@
-import AbstractView from './_abstract';
+import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
-import { DATE_FORMATS } from '../const';
 import { Point } from '../types-ts';
-import { formattedCityNames } from '../utils';
+import { formattedCityNames } from '../utils/common';
 
 function createTripInfoTemplate(points: Point[]) {
 	const totalPoints = points.length;
@@ -14,15 +13,19 @@ function createTripInfoTemplate(points: Point[]) {
 	let formattedEndDate = '';
 
 	if (totalPoints >= 1) {
-		const startDate = points[0].dates.start;
-		const endDate = points[totalPoints - 1].dates.end;
-		formattedStartDate = dayjs(startDate).format(DATE_FORMATS.TRIP_INFO);
-		formattedEndDate = dayjs(endDate).format(DATE_FORMATS.TRIP_INFO);
+		const startDate = points[0].dateFrom;
+		const endDate = points[totalPoints - 1].dateTo;
+		formattedStartDate = dayjs(startDate).format('D MMM');
+		formattedEndDate = dayjs(endDate).format('D MMM');
 	}
 
 	const tripDates = formattedStartDate && formattedEndDate ? `${formattedStartDate} — ${formattedEndDate}` : '';
 
-	const totalCost = totalPoints > 0 ? points.reduce((total, point) => total + point.cost, 0) : '';
+	const totalCost = totalPoints > 0 ? points.reduce((total, point) => {
+		const offersCost = point.offers?.filter((offer) => offer.checked)?.reduce((subtotal, offer) =>
+			subtotal + offer.cost, 0) ?? 0;
+		return total + point.cost + offersCost;
+	}, 0) : '';
 	const costHtml = totalCost !== '' ? `Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCost}</span>` : '';
 
 	return /*html*/`<section class="trip-main__trip-info  trip-info">
@@ -38,14 +41,14 @@ function createTripInfoTemplate(points: Point[]) {
 }
 
 export default class TripInfoView extends AbstractView<HTMLElement> {
-	private points: Point[];
+	#points: Point[];
 
 	constructor(points: Point[]) {
 		super();
-		this.points = points;
+		this.#points = points;
 	}
 
 	get template() {
-		return createTripInfoTemplate(this.points);
+		return createTripInfoTemplate(this.#points);
 	}
 }
