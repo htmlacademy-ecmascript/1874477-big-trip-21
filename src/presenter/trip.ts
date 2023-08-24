@@ -1,11 +1,10 @@
-import FilterView from '../views/trip-filter';
-import TripInfoView from '../views/trip-info';
-// import TripEmptyView from '../views/trip-empty-list';
-import SortView from '../views/trip-sort';
+import PointsModel from '../model/trip';
 import PointPresenter from './point';
 import EventListView from '../views/trip-list';
-import PointsModel from '../model/trip';
+import TripFilterView from '../views/trip-filter';
 import { FilterType } from '../views/trip-filter';
+import TripInfoView from '../views/trip-info';
+import TripSortView from '../views/trip-sort';
 import { SortType } from '../views/trip-sort';
 import { Point } from '../types-ts';
 import { SORT_TYPES } from '../const';
@@ -25,7 +24,7 @@ export default class TripPresenter {
 	#sortedPoints: Record<SortType, Point[]>;
 	#currentSort: SortType;
 	#currentFilter: FilterType = 'everything';
-	#sortView?: SortView;
+	#TripSortView?: TripSortView;
 
 
 	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement; pointsModel: PointsModel }) {
@@ -39,7 +38,7 @@ export default class TripPresenter {
 		this.#filteredPoints = {
 			everything: this.#points,
 			future: this.#points.filter((point) => dayjs(point.dateFrom).isAfter(now)),
-			present: this.#points.filter((point) => dayjs(point.dateFrom).isSame(now) || dayjs(point.dateTo).isAfter(now)),
+			present: this.#points.filter((point) => dayjs(point.dateFrom).isBefore(now) && dayjs(point.dateTo).isAfter(now)),
 			past: this.#points.filter((point) => dayjs(point.dateTo).isBefore(now)),
 		};
 
@@ -51,11 +50,11 @@ export default class TripPresenter {
 	}
 
 	init() {
-		this.#sortView = new SortView({onSortChange: this.#handleSortChange});
+		this.#TripSortView = new TripSortView({ onSortChange: this.#handleSortChange });
 
-		render(this.#sortView, this.#tripContainer);
+		render(this.#TripSortView, this.#tripContainer);
 		render(new TripInfoView(this.#points), headerTripElement, 'afterbegin');
-		render(new FilterView({
+		render(new TripFilterView({
 			onFilterChange: this.#handleFilterChange,
 			disabledFilters: Object.keys(this.#filteredPoints).filter((filter) =>
 				!this.#filteredPoints[filter as FilterType].length) as FilterType[],
@@ -68,12 +67,11 @@ export default class TripPresenter {
 	#handleFilterChange = (filter: FilterType) => {
 		this.#currentFilter = filter;
 		this.#currentSort = SORT_TYPES[2];
-		this.#sortView?.setCheckedInput(this.#currentSort);
+		this.#TripSortView?.setCheckedInput(this.#currentSort);
 		this.#filteredData = this.#sortedPoints[this.#currentSort].filter((point) =>
 			this.#filteredPoints[filter].includes(point));
 		this.#renderPoints(this.#filteredData);
 	};
-
 
 	#handleSortChange = (sort: SortType) => {
 		this.#currentSort = sort;

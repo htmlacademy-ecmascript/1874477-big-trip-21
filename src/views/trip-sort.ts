@@ -34,7 +34,7 @@ function createSortTemplate() {
 	);
 }
 
-export default class SortView extends AbstractView<HTMLElement> {
+export default class TripTripSortView extends AbstractView<HTMLElement> {
 	#onSortChange: (sort: SortType) => void;
 
 	constructor({ onSortChange }: { onSortChange: (sort: SortType) => void }) {

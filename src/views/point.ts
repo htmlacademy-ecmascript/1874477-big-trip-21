@@ -95,5 +95,9 @@ export default class PointView extends AbstractView<HTMLElement> {
 		evt.preventDefault();
 		this.#handleFavoriteClick();
 	};
+
+	removePoints() {
+		this.element.remove();
+	}
 }
 

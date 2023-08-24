@@ -19,7 +19,7 @@ function createFilterTemplate(disabled: FilterType[]) {
       </form>`
 	);
 }
-export default class FilterView extends AbstractView<HTMLElement> {
+export default class TripTripFilterView extends AbstractView<HTMLElement> {
 	#disabledFilters: FilterType[];
 	#onFilterChange: (filter: FilterType) => void;
 

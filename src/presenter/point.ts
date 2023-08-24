@@ -4,9 +4,9 @@ import { Point } from '../types-ts';
 import { render, replace} from '../framework/render';
 
 export default class PointPresenter {
-	#pointContainer: HTMLElement;
-	#pointComponent!: PointView;
-	#pointEditComponent!: PointEditView;
+	#pointContainer: HTMLElement | null = null;
+	#pointComponent: PointView | null = null;
+	#pointEditComponent: PointEditView | null = null;
 
 	constructor(pointContainer: HTMLElement) {
 		this.#pointContainer = pointContainer;
@@ -14,11 +14,11 @@ export default class PointPresenter {
 
 	renderPoint(point: Point) {
 		const replacePointToForm = () => {
-			replace(this.#pointEditComponent, this.#pointComponent);
+			replace(this.#pointEditComponent!, this.#pointComponent!);
 		};
 
 		const replaceFormToPoint = () => {
-			replace(this.#pointComponent, this.#pointEditComponent);
+			replace(this.#pointComponent!, this.#pointEditComponent!);
 		};
 
 		const escKeyDownHandler = (evt: KeyboardEvent) => {
@@ -52,6 +52,6 @@ export default class PointPresenter {
 			},
 		});
 
-		render(this.#pointComponent, this.#pointContainer);
+		render(this.#pointComponent, this.#pointContainer!);
 	}
 }
