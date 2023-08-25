@@ -8,6 +8,7 @@ import TripSortView from '../views/trip-sort';
 import { SortType } from '../views/trip-sort';
 import { Point } from '../types-ts';
 import { SORT_TYPES } from '../const';
+import { updateItem } from '../utils/common';
 import { render } from '../framework/render';
 import dayjs from 'dayjs';
 
@@ -17,8 +18,9 @@ const headerFilterElement = document.querySelector<HTMLDivElement>('.trip-contro
 export default class TripPresenter {
 	#tripComponent = new EventListView();
 	#tripContainer: HTMLDivElement;
-	#pointsModel: PointsModel;
+	#pointsModel: PointsModel | null = null;
 	#points: Point[] = [];
+	#pointPresenters = new Map();
 	#filteredPoints: Record<FilterType, Point[]>;
 	#filteredData: Point[] = [];
 	#sortedPoints: Record<SortType, Point[]>;
@@ -27,10 +29,10 @@ export default class TripPresenter {
 	#TripSortView?: TripSortView;
 
 
-	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement; pointsModel: PointsModel }) {
+	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement; pointsModel: PointsModel | null }) {
 		this.#tripContainer = tripContainer;
 		this.#pointsModel = pointsModel;
-		this.#points = [...this.#pointsModel.points];
+		this.#points = [...this.#pointsModel!.points];
 		this.#currentSort = SORT_TYPES[2];
 
 		const now = dayjs();
@@ -60,7 +62,7 @@ export default class TripPresenter {
 				!this.#filteredPoints[filter as FilterType].length) as FilterType[],
 		}), headerFilterElement);
 
-		render(this.#tripComponent, this.#tripContainer);
+		this.#renderTripList();
 		this.#renderPoints(this.#points);
 	}
 
@@ -82,6 +84,15 @@ export default class TripPresenter {
 		this.#renderPoints(this.#filteredData);
 	};
 
+	#handlePointChange = (updatedPoint: Point) => {
+		this.#points = updateItem(this.#points, updatedPoint);
+		this.#pointPresenters.get(updatedPoint.id).init(updatedPoint);
+	};
+
+	#handleModeChange = () => {
+		this.#pointPresenters.forEach((presenter) => presenter.resetView());
+	};
+
 	#renderPoints(points: Point[]) {
 		this.#tripComponent.clearPointList();
 
@@ -91,7 +102,24 @@ export default class TripPresenter {
 	}
 
 	#renderPoint(point: Point) {
-		const pointPresenter = new PointPresenter(this.#tripComponent.element);
-		pointPresenter.renderPoint(point);
+		const pointPresenter = new PointPresenter({
+			pointContainer: this.#tripComponent.element,
+			onDataChange: this.#handlePointChange,
+			onModeChange: this.#handleModeChange});
+		pointPresenter.init(point);
+		this.#pointPresenters.set(point.id, pointPresenter);
+	}
+
+	// на потом #renderNoPoints() {
+
+	// }
+
+	// #clearPointList() {
+	// 	this.#pointPresenters.forEach((presenter) => presenter.destroy());
+	// 	this.#pointPresenters.clear();
+	// }
+
+	#renderTripList() {
+		render(this.#tripComponent, this.#tripContainer);
 	}
 }

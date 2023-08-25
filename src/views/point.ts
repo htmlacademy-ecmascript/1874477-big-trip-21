@@ -67,11 +67,11 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost
 }
 
 export default class PointView extends AbstractView<HTMLElement> {
-	#point: Point;
-	#handleEditClick: () => void;
-	#handleFavoriteClick: () => void;
+	#point: Point | null = null;
+	#handleEditClick: ((point: Point | null) => void) | null = null;
+	#handleFavoriteClick: ((point: Point | null) => void) | null = null;
 
-	constructor({ point, onEditClick, onFavoriteClick }: { point: Point, onEditClick: () => void, onFavoriteClick: () => void }) {
+	constructor({ point, onEditClick, onFavoriteClick }: { point: Point, onEditClick: ((point: Point | null) => void) | null, onFavoriteClick: ((point: Point | null) => void) | null }) {
 		super();
 
 		this.#point = point;
@@ -83,17 +83,17 @@ export default class PointView extends AbstractView<HTMLElement> {
 	}
 
 	get template() {
-		return createPointTemplate(this.#point);
+		return createPointTemplate(this.#point!);
 	}
 
 	#editClickHandler = (evt: Event) => {
 		evt.preventDefault();
-		this.#handleEditClick();
+		this.#handleEditClick?.(this.#point);
 	};
 
 	#favoriteClickHandler = (evt: Event) => {
 		evt.preventDefault();
-		this.#handleFavoriteClick();
+		this.#handleFavoriteClick?.(this.#point);
 	};
 
 	removePoints() {
