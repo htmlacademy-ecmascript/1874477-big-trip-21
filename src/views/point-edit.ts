@@ -179,10 +179,10 @@ function createEditPointTemplate({ type, destination, dateFrom, dateTo, offers, 
 
 export default class PointEditView extends AbstractView<HTMLElement> {
 	#point: Point;
-	#handleFormSubmit: () => void;
-	#handleButtonClick: () => void;
+	#handleFormSubmit: (point: Point) => void;
+	#handleButtonClick: (point: Point) => void;
 
-	constructor({ point, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: () => void, onButtonClick: () => void }) {
+	constructor({ point, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: (point: Point) => void, onButtonClick: (point: Point) => void }) {
 		super();
 		this.#point = point;
 		this.#handleFormSubmit = onFormSubmit;
@@ -201,11 +201,11 @@ export default class PointEditView extends AbstractView<HTMLElement> {
 
 	#formSubmitHandler = (evt: Event) => {
 		evt.preventDefault();
-		this.#handleFormSubmit();
+		this.#handleFormSubmit(this.#point);
 	};
 
 	#formButtonClickHandler = (evt: Event) => {
 		evt.preventDefault();
-		this.#handleButtonClick();
+		this.#handleButtonClick(this.#point);
 	};
 }

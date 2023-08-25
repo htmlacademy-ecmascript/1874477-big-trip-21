@@ -1,5 +1,6 @@
 import { getRandomArrayElement } from './utils/utils';
 import { Point, Offers } from './types-ts';
+import {nanoid} from 'nanoid';
 
 const destinationDescriptions = [
 	`Lorem ipsum, dolor sit amet consectetur adipisicing elit. Culpa amet dignissimos quae
@@ -179,7 +180,7 @@ const NEW_BLANK_POINT = {
 
 const mockWayPoints: Point[] = [
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'Flight',
 		destination: destinations[2],
 		dateFrom: '2023-07-18T10:30',
@@ -189,7 +190,7 @@ const mockWayPoints: Point[] = [
 		isFavorite: true,
 	},
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'Ship',
 		destination: {
 			id: '',
@@ -204,7 +205,7 @@ const mockWayPoints: Point[] = [
 		isFavorite: false,
 	},
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'Check-in',
 		destination: destinations[5],
 		dateFrom: '2023-11-01T03:04',
@@ -214,7 +215,7 @@ const mockWayPoints: Point[] = [
 		isFavorite: false,
 	},
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'taxi',
 		destination: destinations[3],
 		dateFrom: '2023-11-20T05:03',
@@ -224,7 +225,7 @@ const mockWayPoints: Point[] = [
 		isFavorite: true,
 	},
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'Bus',
 		destination: destinations[5],
 		dateFrom: '2023-07-24T00:22',
@@ -234,7 +235,7 @@ const mockWayPoints: Point[] = [
 		isFavorite: false,
 	},
 	{
-		id: crypto.randomUUID(),
+		id: nanoid(),
 		type: 'Ship',
 		destination: destinations[1],
 		dateFrom: '2023-08-10T10:30',
@@ -250,7 +251,9 @@ function getBlankPoint(): Point {
 }
 
 function getRandomPoint(): Point {
-	return getRandomArrayElement(mockWayPoints);
+	return {
+		...getRandomArrayElement(mockWayPoints)
+	};
 }
 
 function getDestinations() {
