@@ -28,11 +28,9 @@ export default class TripPresenter {
 	#currentSortType: SortType = SORT_TYPES[2];
 	#sourcedTripPoints: Point[] = [];
 
-  
 	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement; pointsModel: PointsModel | null }) {
 		this.#tripContainer = tripContainer;
 		this.#pointsModel = pointsModel;
-    
 	}
 
 	init() {
@@ -63,7 +61,7 @@ export default class TripPresenter {
 			default:
 				this.#tripPoints.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
 		}
-    
+
 		this.#currentSortType = sortType;
 	}
 
