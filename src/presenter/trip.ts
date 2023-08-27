@@ -34,7 +34,7 @@ export default class TripPresenter {
 	}
 
 	init() {
-		this.#tripPoints = [...this.#pointsModel!.points];
+		this.#tripPoints = [...this.#pointsModel!.points.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)))];
 		this.#sourcedTripPoints = [...this.#pointsModel!.points];
 
 		this.#renderTrip();
