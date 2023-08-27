@@ -33,4 +33,4 @@ interface Point {
   isFavorite: boolean;
 }
 
-export { Point, Offer, Photo, Offers };
+export { Point, Destination, Offer, Photo, Offers };
