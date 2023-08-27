@@ -23,7 +23,7 @@ interface Photo {
   alt: string;
 }
 interface Point {
-  id: string;
+  id?: string;
   type: string;
   destination: Destination;
   dateFrom: string;
