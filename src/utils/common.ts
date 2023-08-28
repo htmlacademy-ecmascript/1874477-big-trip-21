@@ -14,21 +14,14 @@ function getFormattedDateDiff(date1: Date, date2: Date): string {
 
 function formattedCityNames(cities: string[]) {
 	const validCities = cities.filter((city) => city && city.trim() !== '');
-	const numValidCities = validCities.length;
-	const uniqueCitiesSet = new Set(cities.filter((city) => city && city.trim() !== ''));
-	const uniqueCitiesArray = Array.from(uniqueCitiesSet);
-	const numCities = uniqueCitiesArray.length;
+	const numCities = validCities.length;
 
 	if (numCities === 0) {
 		return '';
 	} else if (numCities === 1) {
-		return uniqueCitiesArray[0];
-	} else if (numCities === 2) {
-		return `${uniqueCitiesArray[0]} — ... — ${uniqueCitiesArray[numCities - 1]}`;
-	} else if (uniqueCitiesArray[1] !== validCities[numValidCities - 1]) {
-		return `${validCities[0]} — ${uniqueCitiesArray[1]} — ${validCities[numValidCities - 1]}`;
+		return validCities[0];
 	} else {
-		return `${validCities[0]} — ${uniqueCitiesArray[2]} — ${validCities[numValidCities - 1]}`;
+		return `${validCities[0]} —...— ${validCities[numCities - 1]}`;
 	}
 }
 

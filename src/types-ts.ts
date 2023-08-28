@@ -17,13 +17,12 @@ interface Offer {
 type Offers = {
   [key: string]: Offer[];
 };
-
 interface Photo {
   src: string;
   alt: string;
 }
 interface Point {
-  id: string;
+  id?: string;
   type: string;
   destination: Destination;
   dateFrom: string;
@@ -33,4 +32,4 @@ interface Point {
   isFavorite: boolean;
 }
 
-export { Point, Offer, Photo, Offers };
+export { Point, Destination, Offer, Photo, Offers };

@@ -1,4 +1,3 @@
-// import type { MessageText } from '../constants/messages';
 import AbstractView from '../framework/view/abstract-view';
 
 function createEmptyListMessage(message: string) {
