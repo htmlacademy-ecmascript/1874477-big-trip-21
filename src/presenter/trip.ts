@@ -56,10 +56,10 @@ export default class TripPresenter {
 	#sortPoints(sortType: SortType) {
 		switch (sortType) {
 			case SORT_TYPES[0]:
-				this.#tripPoints.sort((a, b) => a.cost - b.cost);
+				this.#tripPoints.sort((a, b) => b.cost - a.cost);
 				break;
 			case SORT_TYPES[1]:
-				this.#tripPoints.sort((a, b) => dayjs(a.dateTo).diff(dayjs(a.dateFrom)) - dayjs(b.dateTo).diff(dayjs(b.dateFrom)));
+				this.#tripPoints.sort((a, b) => dayjs(b.dateTo).diff(dayjs(b.dateFrom)) - dayjs(a.dateTo).diff(dayjs(a.dateFrom)));
 				break;
 			default:
 				this.#tripPoints.sort((a, b) => dayjs(a.dateFrom).diff(dayjs(b.dateFrom)));
