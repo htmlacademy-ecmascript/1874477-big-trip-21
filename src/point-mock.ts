@@ -255,4 +255,4 @@ function getDestinations() {
 }
 
 
-export { getBlankPoint, getRandomPoint, getDestinations, NEW_BLANK_POINT, offers };
+export { getBlankPoint, getRandomPoint, getDestinations, NEW_BLANK_POINT, offers, destinations };
