@@ -1,11 +1,12 @@
 import PointsModel from '../model/trip';
 import PointPresenter from './point';
+import TripTripFilterView from '../views/trip-filter';
 import TripListView from '../views/trip-list';
 import TripInfoView from '../views/trip-info';
 import TripSortView from '../views/trip-sort';
 import TripEmptyView from '../views/trip-empty-list';
 import { SortType } from '../views/trip-sort';
-import { SORT_TYPES } from '../const';
+import { SORT_TYPES, FILTER_TYPES, FilterType } from '../const';
 import { Point } from '../types-ts';
 import { updateItem } from '../utils/common';
 import { render } from '../framework/render';
@@ -22,10 +23,12 @@ export default class TripPresenter {
 	#pointPresenters = new Map();
 
 	#tripPoints: Point[] = [];
+	#onFilterChange: (() => void) | null = null;
 
 	#sortComponent: TripSortView | null = null;
 	#noTripComponent = new TripEmptyView('Click New Event to create your first point');
 	#currentSortType: SortType = SORT_TYPES[2];
+	#currentFilterType: FilterType = FILTER_TYPES[0];
 	#sourcedTripPoints: Point[] = [];
 
 	constructor({ tripContainer, pointsModel }: { tripContainer: HTMLDivElement; pointsModel: PointsModel | null }) {
@@ -107,8 +110,28 @@ export default class TripPresenter {
 		this.#renderPoints();
 	}
 
+	#handleFilterChange = (filterType: FilterType) => {
+		// const now = dayjs();
+		// switch (filterType) {
+		// 	case FILTER_TYPES[1]:
+		// 		this.#tripPoints = this.#sourcedTripPoints.filter((point) => dayjs(point.dateFrom).isAfter(now));
+		// 		break;
+		// 	case FILTER_TYPES[2]:
+		// 		this.#tripPoints = this.#sourcedTripPoints.filter((point) => dayjs(point.dateFrom).isBefore(now) && dayjs(point.dateTo).isAfter(now));
+		// 		break;
+		// 	case FILTER_TYPES[3]:
+		// 		this.#tripPoints = this.#sourcedTripPoints.filter((point) => dayjs(point.dateTo).isBefore(now));
+		// 		break;
+		// 	default:
+		// 		this.#tripPoints = [...this.#sourcedTripPoints];
+		// }
+
+		this.#currentFilterType = filterType;
+	};
+
 	#renderTrip() {
 		render(new TripInfoView(this.#sourcedTripPoints), headerTripElement, 'afterbegin');
+		render(new TripTripFilterView({ onFilterChange: this.#handleFilterChange }), headerTripElement);
 
 		this.#renderSort();
 		this.#renderTripList();

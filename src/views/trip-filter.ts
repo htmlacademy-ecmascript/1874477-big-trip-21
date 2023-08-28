@@ -1,8 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
-import { FILTER_TYPES } from '../const';
+import { FILTER_TYPES, FilterType } from '../const';
 import { capitalizeFirstLetter } from '../utils/utils';
-
-export type FilterType = typeof FILTER_TYPES[number];
 
 const createFilterItemTemplate = (filter: FilterType, checked = false, disabled = false) =>
 	/*html*/`<div class="trip-filters__filter">
@@ -40,3 +38,4 @@ export default class TripTripFilterView extends AbstractView<HTMLElement> {
 		this.#onFilterChange(target.value as FilterType);
 	};
 }
+

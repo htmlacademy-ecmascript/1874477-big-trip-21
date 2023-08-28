@@ -17,7 +17,6 @@ interface Offer {
 type Offers = {
   [key: string]: Offer[];
 };
-
 interface Photo {
   src: string;
   alt: string;
