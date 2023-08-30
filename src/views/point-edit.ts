@@ -3,6 +3,9 @@ import { getDestinations, NEW_BLANK_POINT } from '../point-mock';
 import { Point, Offer, Photo, Destination } from '../types-ts';
 import { AllOffers, POINT_TYPES } from '../const';
 import dayjs from 'dayjs';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
 
 function createTypesTemplate(selectedType: string) {
 	let template = '';
@@ -157,6 +160,9 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 	#handleButtonClick: (point: Point) => void;
 	#handleEditFormDelete: ((point: Point) => void) | null = null;
 
+	#datepickrStartDate: flatpickr.Instance | null = null;
+	#datepickrEndDate: flatpickr.Instance | null = null;
+
 
 	constructor({ point = NEW_BLANK_POINT, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: (point: Point) => void, onButtonClick: (point: Point) => void }) {
 		super();
@@ -167,8 +173,8 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 			point,
 			destination: getDestinations().find((destination) => destination.name === point.destination.name),
 		});
-		this._restoreHandlers();
 
+		this._restoreHandlers();
 	}
 
 	get template() {
@@ -189,7 +195,64 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
     this.element.querySelector('.event__input--destination')!.addEventListener('change', this.#pointDestinationChangeHandler);
     this.element.querySelector('.event__input--price')!.addEventListener('change', this.#pointPriceChangeHandler);
     this.element.querySelector('.event__details')?.addEventListener('change', this.#pointOfferClickHandler);
+
+    this.#setDatepickr();
 	}
+
+	#setDatepickr() {
+		const dateFrom = new Date(this._state.point.dateFrom);
+		const dateTo = new Date(this._state.point.dateTo);
+
+		this.#datepickrStartDate = flatpickr(
+			this.element.querySelector('#event-start-time-1')!,
+			{
+				enableTime: true,
+				dateFormat: 'd/m/y H:i',
+				defaultDate: dateFrom,
+				'time_24hr': true,
+				maxDate: dateTo,
+				onClose: (dates) => {
+					if (dates.length > 0) {
+						this.#pointStartDateChangeHandler(dates[0]);
+					}
+				},
+			},
+		);
+
+		this.#datepickrEndDate = flatpickr(
+			this.element.querySelector('#event-end-time-1')!,
+			{
+				enableTime: true,
+				dateFormat: 'd/m/y H:i',
+				defaultDate: dateTo,
+				'time_24hr': true,
+				minDate: dateFrom,
+				onClose: (selectedDates) => {
+					if (selectedDates.length > 0) {
+						this.#pointEndDateChangeHandler(selectedDates[0]);
+					}
+				},
+			},
+		);
+	}
+
+	#pointStartDateChangeHandler = (userDateAndTime: Date) => {
+		this.updateElement({
+			point: {
+				...this._state.point,
+				dateFrom: userDateAndTime.toISOString(),
+			}
+		});
+	};
+
+	#pointEndDateChangeHandler = (userDateAndTime: Date) => {
+		this.updateElement({
+			point: {
+				...this._state.point,
+				dateTo: userDateAndTime.toISOString(),
+			}
+		});
+	};
 
 	#formSubmitHandler = (evt: Event) => {
 		evt.preventDefault();
