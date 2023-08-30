@@ -53,6 +53,21 @@ const AllOffers: Offers = {
 		}
 	],
 
+	'Ship': [
+		{
+			id: crypto.randomUUID(),
+			name: 'Choose seats',
+			cost: 250,
+			checked: false,
+		},
+		{
+			id: crypto.randomUUID(),
+			name: 'Order meal',
+			cost: 45,
+			checked: false,
+		}
+	],
+
 	'Flight': [
 		{
 			id: crypto.randomUUID(),

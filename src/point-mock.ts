@@ -1,5 +1,6 @@
 import { getRandomArrayElement } from './utils/utils';
 import { Point, Offers } from './types-ts';
+import { AllOffers } from './const';
 import {nanoid} from 'nanoid';
 
 const destinationDescriptions = [
@@ -41,7 +42,12 @@ const destinations = [
 		id: crypto.randomUUID(),
 		name: 'Amsterdam',
 		description: destinationDescriptions[0].slice(50, 80),
-		photos: []
+		photos: [
+			{
+				src: '',
+				alt: ''
+			},
+		]
 	},
 	{
 		id: crypto.randomUUID(),
@@ -183,7 +189,7 @@ const mockWayPoints: Point[] = [
 		destination: destinations[2],
 		dateFrom: '2023-07-18T10:30',
 		dateTo: '2023-07-20T10:50',
-		offers: offers['Flight'],
+		offers: AllOffers['Flight'],
 		cost: 5000,
 		isFavorite: true,
 	},
@@ -197,7 +203,7 @@ const mockWayPoints: Point[] = [
 		},
 		dateFrom: '2023-10-10T10:30',
 		dateTo: '2023-10-10T14:00',
-		offers: offers['Ship'],
+		offers: AllOffers['Ship'],
 		cost: 1000,
 		isFavorite: false,
 	},
@@ -206,7 +212,7 @@ const mockWayPoints: Point[] = [
 		destination: destinations[5],
 		dateFrom: '2023-11-01T03:04',
 		dateTo: '2023-11-01T17:30',
-		offers: offers['Check-in'],
+		offers: AllOffers['Check-in'],
 		cost: 400,
 		isFavorite: false,
 	},
@@ -215,7 +221,7 @@ const mockWayPoints: Point[] = [
 		destination: destinations[3],
 		dateFrom: '2023-11-20T05:03',
 		dateTo: '2023-11-20T13:17',
-		offers: offers['taxi'],
+		offers: AllOffers['taxi'],
 		cost: 800,
 		isFavorite: true,
 	},
@@ -224,7 +230,7 @@ const mockWayPoints: Point[] = [
 		destination: destinations[5],
 		dateFrom: '2023-07-24T00:22',
 		dateTo: '2023-08-11T09:20',
-		offers: offers['Bus'],
+		offers: AllOffers['Bus'],
 		cost: 450,
 		isFavorite: false,
 	},
@@ -233,7 +239,7 @@ const mockWayPoints: Point[] = [
 		destination: destinations[1],
 		dateFrom: '2023-08-10T10:30',
 		dateTo: '2023-08-10T14:00',
-		offers: offers['Ship'],
+		offers: AllOffers['Ship'],
 		cost: 1000,
 		isFavorite: false,
 	},
