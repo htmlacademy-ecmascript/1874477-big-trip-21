@@ -181,6 +181,19 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 		return createEditPointTemplate(this._state.point);
 	}
 
+	removeElement() {
+		super.removeElement();
+
+		if(this.#datepickrStartDate) {
+			this.#datepickrStartDate.destroy();
+			this.#datepickrStartDate = null;
+		}
+		if(this.#datepickrEndDate) {
+			this.#datepickrEndDate.destroy();
+			this.#datepickrEndDate = null;
+		}
+	}
+
 	reset(point: Point) {
 		this.updateElement({
 			...point,
