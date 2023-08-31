@@ -1,19 +1,20 @@
 import AbstractView from '../framework/view/abstract-view';
+import { NoPointsTextType , FilterType } from '../const';
 
-function createEmptyListMessage(message: string) {
-	return `<p class="trip-events__msg">${message}</p>`;
+function createEmptyListMessage(filterType: FilterType) {
+	const noPointTextValue = NoPointsTextType[filterType];
+	return `<p class="trip-events__msg"> ${noPointTextValue}</p>`;
 }
 
 export default class TripEmptyView extends AbstractView<HTMLParagraphElement> {
-	#content: string | null = null;
+	#filterType: FilterType | null = null;
 
-	constructor(content: string) {
+	constructor({ filterType }: { filterType: FilterType | null}) {
 		super();
-		this.#content = content;
+		this.#filterType = filterType;
 	}
 
 	get template() {
-		return createEmptyListMessage(this.#content!);
+		return createEmptyListMessage(this.#filterType!);
 	}
 }
-

@@ -1,4 +1,3 @@
-import { Point } from '../types-ts';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
@@ -25,8 +24,4 @@ function formattedCityNames(cities: string[]) {
 	}
 }
 
-function updateItem(items: Point[], update: Point) {
-	return items.map((item) => item.id === update.id ? update : item);
-}
-
-export { getFormattedDateDiff , formattedCityNames, updateItem };
+export { getFormattedDateDiff , formattedCityNames };

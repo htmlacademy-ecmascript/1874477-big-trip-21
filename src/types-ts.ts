@@ -32,4 +32,10 @@ interface Point {
   isFavorite: boolean;
 }
 
-export { Point, Destination, Offer, Photo, Offers };
+interface PointEditState {
+  point: Point;
+  destination: Destination;
+  offers: Offer[];
+}
+
+export { Point, Destination, Offer, Photo, Offers, PointEditState };

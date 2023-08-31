@@ -1,8 +1,9 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import { getDestinations, NEW_BLANK_POINT } from '../point-mock';
-import { Point, Offer, Photo, Destination } from '../types-ts';
+import { Point, Offer, Photo, Destination, PointEditState } from '../types-ts';
 import { AllOffers, POINT_TYPES } from '../const';
 import dayjs from 'dayjs';
+import he from 'he';
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
@@ -13,7 +14,7 @@ function createTypesTemplate(selectedType: string) {
 	POINT_TYPES.forEach((type) => {
 		const value = type.toLowerCase();
 		const checked = value === selectedType ? 'checked' : '';
-		template += `
+		template += /*html*/`
       <div class="event__type-item">
         <input id="event-type-${value}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}>
         <label class="event__type-label event__type-label--${value}" for="event-type-${value}-1">${type}</label>
@@ -139,7 +140,7 @@ function createEditPointTemplate({ type, dateFrom, dateTo, offers, cost, destina
               </div>
             </section>` : ''}
 
-            ${destination && destination.description !== '' ? /*html*/`
+            ${he.encode(destination && destination.description) !== '' ? /*html*/`
             <section class="event__section  event__section--destination">
               <h3 class="event__section-title  event__section-title--destination">Destination</h3>
               <p class="event__destination-description">${destination.description}</p>
@@ -150,11 +151,6 @@ function createEditPointTemplate({ type, dateFrom, dateTo, offers, cost, destina
     </li>`;
 }
 
-interface PointEditState {
-  point: Point;
-  destination: Destination;
-  offers: Offer[];
-}
 export default class PointEditView extends AbstractStatefulView<PointEditState, Element> {
 	#handleFormSubmit: (point: Point) => void;
 	#handleButtonClick: (point: Point) => void;
@@ -163,11 +159,12 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 	#datepickrStartDate: flatpickr.Instance | null = null;
 	#datepickrEndDate: flatpickr.Instance | null = null;
 
-
-	constructor({ point = NEW_BLANK_POINT, onFormSubmit, onButtonClick }: { point: Point, onFormSubmit: (point: Point) => void, onButtonClick: (point: Point) => void }) {
+	constructor({ point = NEW_BLANK_POINT, onFormSubmit, onButtonClick, onDeleteClick }:
+    { point: Point, onFormSubmit: (point: Point) => void, onButtonClick: (point: Point) => void, onDeleteClick: (point: Point) => void, }) {
 		super();
 		this.#handleFormSubmit = onFormSubmit;
 		this.#handleButtonClick = onButtonClick;
+		this.#handleEditFormDelete = onDeleteClick;
 
 		this._setState({
 			point,
@@ -279,7 +276,7 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 
 	#formDeleteHandler = (evt: Event) => {
 		evt.preventDefault();
-		this.#handleEditFormDelete?.(this._state.point);
+		this.#handleEditFormDelete!(this._state.point);
 	};
 
 	#pointTypeChangeHandler = (evt: Event) => {
@@ -339,7 +336,6 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 		});
 	};
 
-
 	#pointPriceChangeHandler = (evt: Event) => {
 		evt.preventDefault();
 		const target = evt.target as HTMLInputElement;
@@ -351,6 +347,4 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 			},
 		});
 	};
-
-
 }

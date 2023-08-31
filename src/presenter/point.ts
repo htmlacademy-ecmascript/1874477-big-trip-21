@@ -1,24 +1,23 @@
 import PointView from '../views/point';
 import PointEditView from '../views/point-edit';
 import { Point } from '../types-ts';
+import { Mode, UserAction, UpdateType } from '../const';
 import { render, replace, remove } from '../framework/render';
 
-const Mode = {
-	DEFAULT: 'DEFAULT',
-	EDITING: 'EDITING',
-};
 export default class PointPresenter {
 	#pointContainer: HTMLElement | null = null;
 	#pointComponent: PointView | null = null;
 	#pointEditComponent: PointEditView | null = null;
 	#point: Point | null = null;
 	#mode = Mode.DEFAULT;
-	#handleDataChange: ((point: Point) => void) | null = null;
+	#handleDataChange: ((action: string, updateType: string, point: Point) => void) | null = null;
 	#handleModeChange: () => void;
 
 	constructor({ pointContainer, onDataChange, onModeChange }:
-    { pointContainer: HTMLElement, onDataChange: ((point: Point) => void) | null,
-      onModeChange: () => void }) {
+		{
+			pointContainer: HTMLElement, onDataChange: ((action: string, updateType: string, point: Point) => void) | null,
+			onModeChange: () => void
+		}) {
 		this.#pointContainer = pointContainer;
 		this.#handleDataChange = onDataChange;
 		this.#handleModeChange = onModeChange;
@@ -30,7 +29,6 @@ export default class PointPresenter {
 		const prevPointComponent = this.#pointComponent;
 		const prevPointEditComponent = this.#pointEditComponent;
 
-
 		this.#pointComponent = new PointView({
 			point: this.#point,
 			onEditClick: this.#handleEditClick,
@@ -39,8 +37,9 @@ export default class PointPresenter {
 
 		this.#pointEditComponent = new PointEditView({
 			point: this.#point,
-			onFormSubmit: this.#handleFormSubmit,
+			onFormSubmit: this.#handleEditFormSubmit,
 			onButtonClick: this.#handleEditFormClick,
+			onDeleteClick: this.#handleEditFormDelete,
 		});
 
 		if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -88,8 +87,8 @@ export default class PointPresenter {
 	#escKeyDownHandler = (evt: KeyboardEvent) => {
 		if (evt.key === 'Escape') {
 			evt.preventDefault();
-      this.#pointEditComponent!.reset(this.#point!);
-      this.#replaceFormToPoint();
+			this.#pointEditComponent!.reset(this.#point!);
+			this.#replaceFormToPoint();
 
 		}
 	};
@@ -99,16 +98,31 @@ export default class PointPresenter {
 	};
 
 	#handleEditFormClick = () => {
-    this.#pointEditComponent!.reset(this.#point!);
-    this.#replaceFormToPoint();
+		this.#pointEditComponent!.reset(this.#point!);
+		this.#replaceFormToPoint();
 	};
 
 	#handleFavoriteClick = () => {
-		this.#handleDataChange?.({ ...this.#point!, isFavorite: !this.#point!.isFavorite });
+		this.#handleDataChange!(
+			UserAction.UPDATE_POINT,
+			UpdateType.MINOR,
+			{ ...this.#point!, isFavorite: !this.#point!.isFavorite });
 	};
 
-	#handleFormSubmit = (point: Point) => {
-		this.#handleDataChange?.(point);
+	#handleEditFormSubmit = (point: Point) => {
+		this.#handleDataChange!(
+			UserAction.UPDATE_POINT,
+			UpdateType.MINOR,
+			point,
+		);
 		this.#replaceFormToPoint();
+	};
+
+	#handleEditFormDelete = (point: Point) => {
+		this.#handleDataChange!(
+			UserAction.DELETE_POINT,
+			UpdateType.MINOR,
+			point,
+		);
 	};
 }
