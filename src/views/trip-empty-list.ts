@@ -1,5 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
-import { NoPointsTextType , FilterType } from '../const';
+import { NoPointsTextType } from '../const';
+import { FilterType } from '../types-ts';
 
 function createEmptyListMessage(filterType: FilterType) {
 	const noPointTextValue = NoPointsTextType[filterType];

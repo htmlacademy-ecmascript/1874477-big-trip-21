@@ -1,5 +1,6 @@
 import Observable from '../framework/observable';
-import { FILTER_TYPES, FilterType } from '../const';
+import { FILTER_TYPES } from '../const';
+import { FilterType, UpdateType } from '../types-ts';
 
 export default class FilterModel extends Observable {
 	#filter: FilterType = FILTER_TYPES[0];
@@ -8,7 +9,7 @@ export default class FilterModel extends Observable {
 		return this.#filter;
 	}
 
-	setFilter(typeEvent: string, currentFilter: FilterType) {
+	setFilter(typeEvent: UpdateType, currentFilter: FilterType) {
 		this.#filter = currentFilter;
 		this._notify(typeEvent, this.#filter);
 	}

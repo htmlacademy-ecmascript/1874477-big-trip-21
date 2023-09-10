@@ -1,6 +1,6 @@
 import Observable from '../framework/observable';
 import { getRandomPoint } from '../point-mock';
-import { Point } from '../types-ts';
+import { Point, UpdateType } from '../types-ts';
 
 const POINTS_COUNT = 15;
 
@@ -11,7 +11,7 @@ export default class PointsModel extends Observable {
 		return this.#points;
 	}
 
-	updatePoint(updateType: unknown, update: Point) {
+	updatePoint(updateType: UpdateType, update: Point) {
 		const index = this.#points.findIndex((point) => point.id === update.id);
 
 		if (index === -1) {
@@ -27,7 +27,7 @@ export default class PointsModel extends Observable {
 		this._notify(updateType, update);
 	}
 
-	addPoint(updateType: unknown, update: Point) {
+	addPoint(updateType: UpdateType, update: Point) {
 		this.#points = [
 			update,
 			...this.#points,
@@ -36,7 +36,7 @@ export default class PointsModel extends Observable {
 		this._notify(updateType, update);
 	}
 
-	deletePoint(updateType: unknown, update: Point) {
+	deletePoint(updateType: UpdateType, update: Point) {
 		const index = this.#points.findIndex((point) => point.id === update.id);
 
 		if (index === -1) {

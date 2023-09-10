@@ -1,4 +1,7 @@
-type observerCallback = (event: unknown, payload?: unknown) => void;
+import { FilterType, UpdateType } from '../types-ts';
+import { Point } from '../types-ts';
+
+type observerCallback = (event: UpdateType, payload?: Point | FilterType) => void;
 /**
  * Класс, реализующий паттерн Наблюдатель.
  */
@@ -27,7 +30,7 @@ export default class Observable {
    * @param {*} event Тип события
    * @param {*} payload Дополнительная информация
    */
-	_notify(event: unknown, payload?: unknown) {
+	_notify(event: UpdateType, payload?: Point | FilterType) {
 		this.#observers.forEach((observer) => observer(event, payload));
 	}
 }

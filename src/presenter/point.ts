@@ -1,8 +1,14 @@
 import PointView from '../views/point';
 import PointEditView from '../views/point-edit';
-import { Point } from '../types-ts';
-import { Mode, UserAction, UpdateType } from '../const';
+import { Point, UserAction, UpdateType } from '../types-ts';
+import { Mode } from '../const';
 import { render, replace, remove } from '../framework/render';
+
+interface PointPresenterProps {
+	pointContainer: HTMLElement,
+	onDataChange: ((action: UserAction, updateType: UpdateType, point: Point) => void) | null,
+	onModeChange: () => void
+}
 
 export default class PointPresenter {
 	#pointContainer: HTMLElement | null = null;
@@ -10,14 +16,10 @@ export default class PointPresenter {
 	#pointEditComponent: PointEditView | null = null;
 	#point: Point | null = null;
 	#mode = Mode.DEFAULT;
-	#handleDataChange: ((action: string, updateType: string, point: Point) => void) | null = null;
+	#handleDataChange: ((action: UserAction, updateType: UpdateType, point: Point) => void) | null = null;
 	#handleModeChange: () => void;
 
-	constructor({ pointContainer, onDataChange, onModeChange }:
-		{
-			pointContainer: HTMLElement, onDataChange: ((action: string, updateType: string, point: Point) => void) | null,
-			onModeChange: () => void
-		}) {
+	constructor({ pointContainer, onDataChange, onModeChange }: PointPresenterProps) {
 		this.#pointContainer = pointContainer;
 		this.#handleDataChange = onDataChange;
 		this.#handleModeChange = onModeChange;
@@ -39,7 +41,7 @@ export default class PointPresenter {
 			point: this.#point,
 			onFormSubmit: this.#handleEditFormSubmit,
 			onButtonClick: this.#handleEditFormClick,
-			onDeleteClick: this.#handleEditFormDelete,
+			onDeleteClick: this.#handleEditFormDeleteClick,
 		});
 
 		if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -104,24 +106,24 @@ export default class PointPresenter {
 
 	#handleFavoriteClick = () => {
 		this.#handleDataChange!(
-			UserAction.UPDATE_POINT,
-			UpdateType.MINOR,
+			'UPDATE_POINT',
+			'MINOR',
 			{ ...this.#point!, isFavorite: !this.#point!.isFavorite });
 	};
 
 	#handleEditFormSubmit = (point: Point) => {
 		this.#handleDataChange!(
-			UserAction.UPDATE_POINT,
-			UpdateType.MINOR,
+			'UPDATE_POINT',
+			'MINOR',
 			point,
 		);
 		this.#replaceFormToPoint();
 	};
 
-	#handleEditFormDelete = (point: Point) => {
+	#handleEditFormDeleteClick = (point: Point) => {
 		this.#handleDataChange!(
-			UserAction.DELETE_POINT,
-			UpdateType.MINOR,
+			'DELETE_POINT',
+			'MINOR',
 			point,
 		);
 	};

@@ -3,10 +3,9 @@ import PointPresenter from './point';
 import TripListView from '../views/trip-list';
 import TripInfoView from '../views/trip-info';
 import TripSortView from '../views/trip-sort';
-import { SortType } from '../views/trip-sort';
 import { headerTripElement } from '../main';
-import { SORT_TYPES, UpdateType, UserAction, FILTER_FUNCTIONS, FILTER_TYPES, FilterType } from '../const';
-import { Point } from '../types-ts';
+import { SORT_TYPES, FILTER_TYPES, FILTER_FUNCTIONS } from '../const';
+import { Point, UpdateType, UserAction, FilterType, SortType } from '../types-ts';
 import { sortByPrice, sortByDuration, sortByDate } from '../utils/point';
 import { render, remove } from '../framework/render';
 import FilterModel from '../model/filter';
@@ -16,8 +15,8 @@ export default class TripPresenter {
 	#tripComponent = new TripListView();
 	#tripContainer: HTMLDivElement;
 
-	#pointsModel: PointsModel | null = null;
-	#filterModel: FilterModel | null = null;
+	#pointsModel: PointsModel;
+	#filterModel: FilterModel;
 	#pointPresenters = new Map();
 
 	#tripInfo: TripInfoView | null = null;
@@ -27,7 +26,7 @@ export default class TripPresenter {
 	#filterType: FilterType = FILTER_TYPES[0];
 
 	constructor({ tripContainer, pointsModel, filterModel }:
-		{ tripContainer: HTMLDivElement; pointsModel: PointsModel | null; filterModel: FilterModel | null }) {
+		{ tripContainer: HTMLDivElement; pointsModel: PointsModel; filterModel: FilterModel}) {
 		this.#tripContainer = tripContainer;
 		this.#pointsModel = pointsModel;
 		this.#filterModel = filterModel;
@@ -55,33 +54,35 @@ export default class TripPresenter {
 		this.#renderTrip();
 	}
 
-	#handleViewAction = (actionType: string, updateType: string, update: Point) => {
+	#handleViewAction = (actionType: UserAction, updateType: UpdateType, update: Point) => {
 		switch (actionType) {
-			case UserAction.UPDATE_POINT:
+			case 'UPDATE_POINT':
 				this.#pointsModel?.updatePoint(updateType, update);
 				break;
-			case UserAction.ADD_POINT:
+			case 'ADD_POINT':
 				this.#pointsModel?.addPoint(updateType, update);
 				break;
-			case UserAction.DELETE_POINT:
+			case 'DELETE_POINT':
 				this.#pointsModel?.deletePoint(updateType, update);
 				break;
 		}
 	};
 
 	/* Не могу избавиться от типа any в data: any */
-	#handleModelEvent = (updateType: unknown, data: any) => {
+	#handleModelEvent = (updateType: UpdateType, data?: Point | FilterType) => {
 		switch (updateType) {
-			case UpdateType.PATCH:
-				this.#pointPresenters.get(data.id).init(data);
+			case 'PATCH':
+				if (data && typeof data !== 'string') {
+					this.#pointPresenters.get(data.id).init(data);
+				}
 				break;
-			case UpdateType.MINOR:
+			case 'MINOR':
 				this.#clearTripList();
 				remove(this.#tripInfo!);
 				this.#renderTripInfo();
 				this.#renderTripList();
 				break;
-			case UpdateType.MAJOR:
+			case 'MAJOR':
 				this.#clearTripList({ resetSortType: true });
 				remove(this.#tripInfo!);
 				this.#renderTripInfo();

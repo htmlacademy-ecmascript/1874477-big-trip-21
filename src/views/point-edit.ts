@@ -13,11 +13,11 @@ function createTypesTemplate(selectedType: string) {
 
 	POINT_TYPES.forEach((type) => {
 		const value = type.toLowerCase();
-		const checked = value === selectedType ? 'checked' : '';
+		const checked = value === selectedType.toLowerCase() ? 'checked' : '';
 		template += /*html*/`
       <div class="event__type-item">
-        <input id="event-type-${value}-1" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}>
-        <label class="event__type-label event__type-label--${value}" for="event-type-${value}-1">${type}</label>
+        <input id="event-type-${value}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}>
+        <label class="event__type-label event__type-label--${value}" for="event-type-${value}">${type}</label>
       </div>
     `;
 	});

@@ -32,10 +32,18 @@ interface Point {
   isFavorite: boolean;
 }
 
+type UserAction = 'UPDATE_POINT' | 'ADD_POINT' | 'DELETE_POINT';
+
+type UpdateType = 'PATCH' | 'MINOR' | 'MAJOR';
+
+type FilterType = 'everything' | 'future' | 'present' | 'past';
+
+type SortType = 'sort-price' | 'sort-time' | 'sort-day';
+
 interface PointEditState {
   point: Point;
   destination: Destination;
   offers: Offer[];
 }
 
-export { Point, Destination, Offer, Photo, Offers, PointEditState };
+export { Point, Destination, Offer, Photo, Offers, PointEditState, UserAction, UpdateType, FilterType, SortType};

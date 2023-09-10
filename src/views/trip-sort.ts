@@ -1,7 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import { SORT_TYPES } from '../const';
-
-export type SortType = typeof SORT_TYPES[number];
+import { SortType } from '../types-ts';
 
 function createSortTemplate() {
 	return (

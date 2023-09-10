@@ -1,17 +1,24 @@
 import { render, replace, remove } from '../framework/render';
 import TripFilterView from '../views/trip-filter';
-import { FILTER_TYPES, FilterType, UpdateType, FILTER_FUNCTIONS } from '../const';
+import { FILTER_TYPES, FILTER_FUNCTIONS } from '../const';
+import { FilterType } from '../types-ts';
 import FilterModel from '../model/filter';
 import PointsModel from '../model/trip';
+
+interface FilterPresenterProps {
+	filterContainer: HTMLElement,
+	filterModel: FilterModel,
+	pointsModel: PointsModel
+}
 
 export default class FilterPresenter {
 	#filterComponent: TripFilterView | null = null;
 	#filterContainer: HTMLElement | null = null;
-	#pointsModel: PointsModel | null = null;
-	#filterModel: FilterModel | null = null;
+	#pointsModel: PointsModel;
+	#filterModel: FilterModel;
 	#currentFilter: FilterType = FILTER_TYPES[0];
 
-	constructor({ filterContainer, filterModel, pointsModel }: { filterContainer: HTMLElement, filterModel: FilterModel, pointsModel: PointsModel }) {
+	constructor({ filterContainer, filterModel, pointsModel }: FilterPresenterProps) {
 		this.#filterContainer = filterContainer;
 		this.#filterModel = filterModel;
 		this.#pointsModel = pointsModel;
@@ -27,15 +34,15 @@ export default class FilterPresenter {
 		const disabledFilters: FilterType[] = [];
 
 		const filters = Object.values(FILTER_TYPES).map((type) => {
-			const count = FILTER_FUNCTIONS[type](points).length;
+			const disabledFiltersTypes = FILTER_FUNCTIONS[type](points).length;
 
-			if (count === 0) {
+			if (disabledFiltersTypes === 0) {
 				disabledFilters.push(type);
 			}
 
 			return {
 				type,
-				count,
+				disabledFiltersTypes,
 			};
 		});
 
@@ -67,7 +74,7 @@ export default class FilterPresenter {
 		}
 
 		this.#currentFilter = filterType;
-		this.#filterModel!.setFilter(UpdateType.MAJOR, filterType);
+		this.#filterModel!.setFilter('MAJOR', filterType);
 	};
 
 	#handleModelEvent = () => {
