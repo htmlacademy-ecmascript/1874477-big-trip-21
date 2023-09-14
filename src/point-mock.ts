@@ -168,6 +168,8 @@ const offers: Offers = {
 	],
 };
 
+const now = new Date();
+
 const NEW_BLANK_POINT = {
 	type: 'Flight',
 	destination: {
@@ -176,8 +178,8 @@ const NEW_BLANK_POINT = {
 		description: '',
 		photos: []
 	},
-	dateFrom: '',
-	dateTo: '',
+	dateFrom: now.toISOString(),
+	dateTo: now.toISOString(),
 	offers: [],
 	cost: 0,
 	isFavorite: false,

@@ -2,7 +2,7 @@ import Observable from '../framework/observable';
 import { getRandomPoint } from '../point-mock';
 import { Point, UpdateType } from '../types-ts';
 
-const POINTS_COUNT = 15;
+const POINTS_COUNT = 5;
 
 export default class PointsModel extends Observable {
 	#points = Array.from({ length: POINTS_COUNT }, getRandomPoint);

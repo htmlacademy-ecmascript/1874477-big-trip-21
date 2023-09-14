@@ -12,10 +12,16 @@ const createFilterItemTemplate = (filter: FilterType, disabled = false, currentF
 
 function createFilterTemplate(disabled: FilterType[], currentFilter: FilterType) {
 	return (
-	/*html*/`<form class="trip-filters" action="#" method="get">
-  ${FILTER_TYPES.map((filter) => createFilterItemTemplate(filter, disabled.includes(filter), currentFilter)).join('')}
+	/*html*/`
+	<div class="trip-main__trip-controls  trip-controls">
+	<div class="trip-controls__filters">
+	  <h2 class="visually-hidden">Filter events</h2>
+	<form class="trip-filters" action="#" method="get">
+ 	 ${FILTER_TYPES.map((filter) => createFilterItemTemplate(filter, disabled.includes(filter), currentFilter)).join('')}
         <button class="visually-hidden" type="submit">Accept filter</button>
-      </form>`
+      </form>
+	  </div>
+	  </div>`
 	);
 }
 

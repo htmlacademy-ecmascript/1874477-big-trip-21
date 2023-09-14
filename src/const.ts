@@ -7,7 +7,6 @@ const Mode = {
 	DEFAULT: 'DEFAULT',
 	EDITING: 'EDITING',
 	CREATING: 'CREATING',
-	ADDITION: 'ADDITION',
 };
 
 const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'] as const;
