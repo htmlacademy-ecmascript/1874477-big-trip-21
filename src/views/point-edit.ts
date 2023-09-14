@@ -114,7 +114,7 @@ function createEditPointTemplate({ type, dateFrom, dateTo, offers, cost, destina
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? destination.name : ''}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination ? he.encode(destination.name) : ''}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationsTemplate}
             </datalist>
@@ -133,7 +133,7 @@ function createEditPointTemplate({ type, dateFrom, dateTo, offers, cost, destina
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${cost}">
+            <input class="event__input  event__input--price" id="event-price-1" type="number" min="0" name="event-price" value="${he.encode(cost.toString())}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
