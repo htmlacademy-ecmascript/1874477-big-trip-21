@@ -1,6 +1,5 @@
 import AbstractView from './view/abstract-view';
 
-
 const enum RenderPosition {
 	BEFOREBEGIN = 'beforebegin',
 	AFTERBEGIN = 'afterbegin',

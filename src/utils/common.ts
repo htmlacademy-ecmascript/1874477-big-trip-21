@@ -1,6 +1,6 @@
-import { Point } from '../types-ts';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import { Offers } from '../types-ts';
 
 dayjs.extend(duration);
 
@@ -25,8 +25,12 @@ function formattedCityNames(cities: string[]) {
 	}
 }
 
-function updateItem(items: Point[], update: Point) {
-	return items.map((item) => item.id === update.id ? update : item);
+function setCheckedToFalse(offers: Offers) {
+	Object.values(offers).forEach((offerArray) => {
+		offerArray.forEach((offer) => {
+			offer.checked = false;
+		});
+	});
 }
 
-export { getFormattedDateDiff , formattedCityNames, updateItem };
+export { getFormattedDateDiff, formattedCityNames, setCheckedToFalse };
