@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
-import { Offers } from '../types-ts';
 
 dayjs.extend(duration);
 
@@ -25,12 +24,4 @@ function formattedCityNames(cities: string[]) {
 	}
 }
 
-function setCheckedToFalse(offers: Offers) {
-	Object.values(offers).forEach((offerArray) => {
-		offerArray.forEach((offer) => {
-			offer.checked = false;
-		});
-	});
-}
-
-export { getFormattedDateDiff, formattedCityNames, setCheckedToFalse };
+export { getFormattedDateDiff, formattedCityNames };

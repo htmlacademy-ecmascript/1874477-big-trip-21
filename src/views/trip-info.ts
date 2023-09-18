@@ -1,12 +1,25 @@
 import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
-import { Point } from '../types-ts';
+import { Destination, Point } from '../types-ts';
 import { formattedCityNames } from '../utils/common';
 
-function createTripInfoTemplate(points: Point[]) {
+function createTripInfoTemplate(points: Point[], totalCost: number, offersPrice: number, destination: Destination[]) {
 	const totalPoints = points.length;
+	const totalPrice = totalCost + offersPrice;
+	const cities = points.map((point) => {
+		const pointDestinationId = point.destination;
+		const allDestinations = destination.find((item) => item.id === pointDestinationId);
+		let destinationName = '';
 
-	const cities = points.map((point) => point.destination.name);
+		if (allDestinations !== undefined) {
+			destinationName = allDestinations.name.toString();
+		} else {
+			destinationName = '';
+		}
+
+		return destinationName;
+	});
+
 	const tripTitle = formattedCityNames(cities);
 
 	let formattedStartDate = '';
@@ -21,12 +34,7 @@ function createTripInfoTemplate(points: Point[]) {
 
 	const tripDates = formattedStartDate && formattedEndDate ? `${formattedStartDate} — ${formattedEndDate}` : '';
 
-	const totalCost = totalPoints > 0 ? points.reduce((total, point) => {
-		const offersCost = point.offers?.filter((offer) => offer.checked)?.reduce((subtotal, offer) =>
-			subtotal + offer.cost, 0) ?? 0;
-		return total + point.cost + offersCost;
-	}, 0) : '';
-	const costHtml = totalCost !== '' ? `Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCost}</span>` : '';
+	const costHtml = (totalPrice === 0) ? '' : `Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>`;
 
 	return /*html*/`<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
@@ -42,13 +50,19 @@ function createTripInfoTemplate(points: Point[]) {
 
 export default class TripInfoView extends AbstractView<HTMLElement> {
 	#points: Point[];
+	#totalCost: number;
+	#offersPrice: number;
+	#destination: Destination[];
 
-	constructor(points: Point[]) {
+	constructor(points: Point[], totalCost: number, offersPrice: number, destination: Destination[]) {
 		super();
 		this.#points = points;
+		this.#totalCost = totalCost;
+		this.#destination = destination;
+		this.#offersPrice = offersPrice;
 	}
 
 	get template() {
-		return createTripInfoTemplate(this.#points);
+		return createTripInfoTemplate(this.#points, this.#totalCost, this.#offersPrice, this.#destination);
 	}
 }

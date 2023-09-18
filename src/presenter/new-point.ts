@@ -1,11 +1,12 @@
 import PointEditView from '../views/point-edit';
 import { render, remove } from '../framework/render';
-import { NEW_BLANK_POINT } from '../point-mock';
-import { Point, UpdateType, UserAction } from '../types-ts';
-import { nanoid } from 'nanoid';
+import { NEW_BLANK_POINT } from '../const';
+import { Point, Offer, UpdateType, UserAction, Destination } from '../types-ts';
 
 interface NewPointPresenterProps {
 	pointContainer: HTMLElement,
+	allOffers: Offer[];
+	destination: Destination[];
 	onDataChange: ((action: UserAction, updateType: UpdateType, point: Point) => void) | null,
 	onDestroy: () => void
 }
@@ -14,12 +15,17 @@ export default class NewPointPresenter {
 	#pointContainer: HTMLElement | null = null;
 	#pointEditComponent: PointEditView | null = null;
 	#newPoint: Point = NEW_BLANK_POINT;
+	#allOffers: Offer[];
+	#destinations: Destination[];
 
 	#handleDataChange: ((action: UserAction, updateType: UpdateType, point: Point) => void) | null = null;
 	#handleDestroy: () => void;
 
-	constructor({ pointContainer, onDataChange, onDestroy }: NewPointPresenterProps) {
+	constructor({ pointContainer, onDataChange, onDestroy, allOffers, destination }: NewPointPresenterProps) {
 		this.#pointContainer = pointContainer;
+		this.#newPoint = NEW_BLANK_POINT;
+		this.#allOffers = allOffers;
+		this.#destinations = destination;
 		this.#handleDataChange = onDataChange;
 		this.#handleDestroy = onDestroy;
 	}
@@ -31,6 +37,8 @@ export default class NewPointPresenter {
 
 		this.#pointEditComponent = new PointEditView({
 			point: this.#newPoint,
+			allOffers: this.#allOffers!,
+			destinations: this.#destinations!,
 			onFormSubmit: this.#handleFormSubmit,
 			onDeleteClick: this.#handleDeleteClick,
 		});
@@ -57,7 +65,7 @@ export default class NewPointPresenter {
 		this.#handleDataChange!(
 			'ADD_POINT',
 			'MINOR',
-			{ id: nanoid(), ...point },
+			point,
 		);
 		this.destroy();
 	};

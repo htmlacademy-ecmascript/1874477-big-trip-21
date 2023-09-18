@@ -1,7 +1,8 @@
 import AbstractView from '../framework/view/abstract-view';
-import { FILTER_TYPES } from '../const';
 import { FilterType } from '../types-ts';
 import { capitalizeFirstLetter } from '../utils/utils';
+
+const filters: FilterType[] = ['everything', 'future', 'present', 'past'];
 
 const createFilterItemTemplate = (filter: FilterType, disabled = false, currentFilter: FilterType) =>
 	/*html*/`<div class="trip-filters__filter">
@@ -17,7 +18,7 @@ function createFilterTemplate(disabled: FilterType[], currentFilter: FilterType)
 	<div class="trip-controls__filters">
 	  <h2 class="visually-hidden">Filter events</h2>
 	<form class="trip-filters" action="#" method="get">
- 	 ${FILTER_TYPES.map((filter) => createFilterItemTemplate(filter, disabled.includes(filter), currentFilter)).join('')}
+ 	 ${filters.map((filter) => createFilterItemTemplate(filter, disabled.includes(filter), currentFilter)).join('')}
         <button class="visually-hidden" type="submit">Accept filter</button>
       </form>
 	  </div>

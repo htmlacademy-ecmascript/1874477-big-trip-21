@@ -2,7 +2,7 @@ interface ApiConfig {
 	url: string;
 	method: string;
 	body: string | null;
-	headers: Headers;
+	headers: Headers | undefined;
 }
 
 export default class ApiService {
@@ -29,11 +29,13 @@ export default class ApiService {
 	async _load(config: ApiConfig): Promise<Response | undefined> {
 		const { url, method = 'GET', body = null, headers = new Headers() } = config;
 
-		headers.append('Authorization', this._authorization);
+		if (headers) {
+			headers.append('Authorization', this._authorization);
+		}
 
 		const response = await fetch(
 			`${this._endPoint}/${url}`,
-			{method, body, headers},
+			{ method, body, headers },
 		);
 
 		try {

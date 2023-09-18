@@ -1,9 +1,9 @@
 import { render, replace, remove } from '../framework/render';
 import TripFilterView from '../views/trip-filter';
-import { FILTER_TYPES, FILTER_FUNCTIONS } from '../const';
+import { FILTER_FUNCTIONS } from '../utils/filter';
 import { FilterType } from '../types-ts';
 import FilterModel from '../model/filter';
-import PointsModel from '../model/trip';
+import PointsModel from '../model/points';
 
 interface FilterPresenterProps {
 	filterContainer: HTMLElement,
@@ -16,7 +16,7 @@ export default class FilterPresenter {
 	#filterContainer: HTMLElement | null = null;
 	#pointsModel: PointsModel;
 	#filterModel: FilterModel;
-	#currentFilter: FilterType = FILTER_TYPES[0];
+	#currentFilter: FilterType = 'everything';
 
 	constructor({ filterContainer, filterModel, pointsModel }: FilterPresenterProps) {
 		this.#filterContainer = filterContainer;
@@ -32,8 +32,9 @@ export default class FilterPresenter {
 	get filters() {
 		const points = this.#pointsModel!.points;
 		const disabledFilters: FilterType[] = [];
+		const filterTypes = ['everything', 'future', 'present', 'past'] as const;
 
-		const filters = Object.values(FILTER_TYPES).map((type) => {
+		const filters = filterTypes.map((type) => {
 			const disabledFiltersTypes = FILTER_FUNCTIONS[type](points).length;
 
 			if (disabledFiltersTypes === 0) {

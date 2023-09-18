@@ -1,28 +1,29 @@
 import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
 import { getFormattedDateDiff } from '../utils/common';
-import { Point, Offer } from '../types-ts';
+import { Point, OfferItem } from '../types-ts';
 
-function createOffersTemplate(offers: Offer[]): string {
+function createOffersTemplate(offers: OfferItem[]): string {
 	if (!offers) {
 		return '';
 	}
 
 	return offers
-		.filter((offer) => offer.checked)
+		.filter((offer) => offer)
 		.map(
 			(offer) => /*html*/`
       <li class="event__offer">
-        <span class="event__offer-title">${offer.name}</span>
+        <span class="event__offer-title">${offer.title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offer.cost}</span>
+        <span class="event__offer-price">${offer.price}</span>
       </li>`
 		)
 		.join('');
 }
 
-function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost, isFavorite }: Point): string {
-	const offersTemplate = createOffersTemplate(offers);
+function createPointTemplate({ type, dateFrom, dateTo, offers, cost, isFavorite }: Point, offersForType: OfferItem[], destinationName: string): string {
+	const filteredOffers = offersForType.filter((offer) => offers.some((id) => String(id) === offer.id));
+	const offersTemplate = createOffersTemplate(filteredOffers);
 	const startDate = new Date(dateFrom);
 	const endDate = new Date(dateTo);
 	const dateForPoint = dayjs(startDate).format('MMM DD');
@@ -36,7 +37,7 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${type} ${destination ? destination.name : ''}</h3>
+        <h3 class="event__title">${type} ${destinationName}</h3>
         <div class="event__schedule">
           <p class="event__time">
             <time class="event__start-time" datetime="${dateStart}">${dateStart}</time>
@@ -68,13 +69,17 @@ function createPointTemplate({ type, destination, dateFrom, dateTo, offers, cost
 
 export default class PointView extends AbstractView<HTMLElement> {
 	#point: Point | null = null;
+	#offersForType: OfferItem[] | null = null;
+	#destination: string;
 	#handleEditClick: ((point: Point | null) => void) | null = null;
 	#handleFavoriteClick: ((point: Point | null) => void) | null = null;
 
-	constructor({ point, onEditClick, onFavoriteClick }: { point: Point, onEditClick: ((point: Point | null) => void) | null, onFavoriteClick: ((point: Point | null) => void) | null }) {
+	constructor({ point, destination, offersForType, onEditClick, onFavoriteClick }: { point: Point, destination: string, offersForType: OfferItem[], onEditClick: ((point: Point | null) => void) | null, onFavoriteClick: ((point: Point | null) => void) | null }) {
 		super();
 
 		this.#point = point;
+		this.#destination = destination;
+		this.#offersForType = offersForType;
 		this.#handleEditClick = onEditClick;
 		this.#handleFavoriteClick = onFavoriteClick;
 
@@ -83,7 +88,7 @@ export default class PointView extends AbstractView<HTMLElement> {
 	}
 
 	get template() {
-		return createPointTemplate(this.#point!);
+		return createPointTemplate(this.#point!,this.#offersForType!, this.#destination);
 	}
 
 	#editClickHandler = (evt: Event) => {
