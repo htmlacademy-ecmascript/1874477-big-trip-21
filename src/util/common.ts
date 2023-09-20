@@ -19,6 +19,10 @@ function formattedCityNames(cities: string[]) {
 		return '';
 	} else if (numCities === 1) {
 		return validCities[0];
+	} else if (numCities === 2 && validCities.length === 2) {
+		return `${validCities[0]} — ${validCities[1]}`;
+	} else if (numCities === 3 && validCities.length === 3) {
+		return `${validCities[0]} — ${validCities[1]}  — ${validCities[2]}`;
 	} else {
 		return `${validCities[0]} —...— ${validCities[numCities - 1]}`;
 	}

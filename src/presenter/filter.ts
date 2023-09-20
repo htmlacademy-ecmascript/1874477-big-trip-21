@@ -1,6 +1,6 @@
 import { render, replace, remove } from '../framework/render';
-import TripFilterView from '../views/trip-filter';
-import { FILTER_FUNCTIONS } from '../utils/filter';
+import TripFilterView from '../view/trip-filter';
+import { FILTER_FUNCTIONS } from '../util/filter';
 import { FilterType } from '../types-ts';
 import FilterModel from '../model/filter';
 import PointsModel from '../model/points';

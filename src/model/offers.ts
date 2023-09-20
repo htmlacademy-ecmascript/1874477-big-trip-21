@@ -1,6 +1,6 @@
 import Observable from '../framework/observable';
 import { Offer } from '../types-ts';
-import OffersApiService from '../api/offers-api';
+import OffersApiService from '../api/offers';
 
 export default class OffersModel extends Observable {
 	#offersApiService: OffersApiService;
@@ -9,10 +9,6 @@ export default class OffersModel extends Observable {
 	constructor({ offersApiService }: { offersApiService: OffersApiService }) {
 		super();
 		this.#offersApiService = offersApiService;
-
-		this.#offersApiService.offers.then((offers: Offer[]) => {
-			this.#offers = offers;
-		});
 	}
 
 	get offers() {
@@ -21,7 +17,6 @@ export default class OffersModel extends Observable {
 
 	async init() {
 		this.#offers = await this.#offersApiService!.offers;
-		return this.#offers;
 	}
 
 	getTotalPriceOffers(type: string, offers: string[]) {

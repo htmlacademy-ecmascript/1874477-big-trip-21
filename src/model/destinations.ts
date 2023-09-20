@@ -1,4 +1,4 @@
-import DestinationsApiService from '../api/destinations-api';
+import DestinationsApiService from '../api/destinations';
 import Observable from '../framework/observable';
 import { Destination } from '../types-ts';
 
@@ -6,13 +6,9 @@ export default class DestinationsModel extends Observable {
 	#destinationsApiService: DestinationsApiService;
 	#destinations: Destination[] = [];
 
-	constructor({ destinationsApiService } : {destinationsApiService: DestinationsApiService}) {
+	constructor({ destinationsApiService }: { destinationsApiService: DestinationsApiService }) {
 		super();
 		this.#destinationsApiService = destinationsApiService;
-
-		this.#destinationsApiService.destinations.then((destinations: Destination[]) => {
-			this.#destinations = destinations;
-		});
 	}
 
 	get destinations() {
@@ -25,6 +21,6 @@ export default class DestinationsModel extends Observable {
 
 	async init() {
 		this.#destinations = await this.#destinationsApiService!.destinations;
-		return this.#destinations;
 	}
+
 }

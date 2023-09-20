@@ -4,16 +4,18 @@ import OffersModel from '../model/offers';
 import DestinationsModel from '../model/destinations';
 import PointPresenter from './point';
 import NewPointPresenter from './new-point';
-import TripListView from '../views/trip-list';
-import TripEmptyView from '../views/trip-empty-list';
-import NewPointButtonView from '../views/new-point-button';
-import TripInfoView from '../views/trip-info';
-import TripSortView from '../views/trip-sort';
-import LoadingView from '../views/loading';
+import TripListView from '../view/trip-list';
+import TripEmptyView from '../view/trip-empty-list';
+import NewPointButtonView from '../view/new-point-button';
+import TripInfoView from '../view/trip-info';
+import TripSortView from '../view/trip-sort';
+import ServerMessageView from '../view/server-message';
 import { Point, UpdateType, UserAction, FilterType, SortType, Offer, Destination } from '../types-ts';
-import { sortByPrice, sortByDuration, sortByDate } from '../utils/sort';
-import { FILTER_FUNCTIONS } from '../utils/filter';
+import { ServerMessage, TimeLimit } from '../const';
+import { sortByPrice, sortByDuration, sortByDate } from '../util/sort';
+import { FILTER_FUNCTIONS } from '../util/filter';
 import { render, remove } from '../framework/render';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
 
 interface TripPresenterProps {
 	infoContainer: HTMLDivElement,
@@ -26,7 +28,7 @@ interface TripPresenterProps {
 
 export default class TripPresenter {
 	#tripComponent = new TripListView();
-	#loadingComponent = new LoadingView();
+	#serverMessageComponent: ServerMessageView | null = null;
 	#infoContainer: HTMLDivElement;
 	#tripContainer: HTMLDivElement;
 
@@ -45,6 +47,10 @@ export default class TripPresenter {
 	#currentSortType: SortType = 'sort-day';
 	#filterType: FilterType = 'everything';
 	#isLoading = true;
+	#uiBlocker = new UiBlocker({
+		lowerLimit: TimeLimit.LOWER_LIMIT,
+		upperLimit: TimeLimit.UPPER_LIMIT
+	});
 
 	constructor({ infoContainer, tripContainer, pointsModel, destinationsModel, offersModel, filterModel }: TripPresenterProps) {
 		this.#infoContainer = infoContainer;
@@ -107,43 +113,64 @@ export default class TripPresenter {
 
 	init() {
 		this.#renderTrip();
-		Promise.all([this.#offersModel.init(), this.#destinationsModel.init(), this.#pointsModel.init()]).then(() => {
-			this.#pointsModel.notifySuccessLoad();
-		});
 	}
 
 	#renderNewPointPresenter() {
-		const newPointPresenter = new NewPointPresenter({
+		this.#newPointPresenter = new NewPointPresenter({
 			pointContainer: this.#tripComponent.element,
 			allOffers: this.#offersModel.offers,
 			destination: this.#destinationsModel.destinations,
 			onDataChange: this.#handleViewAction,
 			onDestroy: this.#onNewPointDestroy
 		});
-		newPointPresenter.init();
+		this.#newPointPresenter.init();
 	}
 
 	#handleNewPointButtonClick = () => {
 		this.#renderNewPoint();
-		this.#newPointButton!.setDisableAttribute();
+		remove(this.#noPointComponent!);
+		this.#newPointButton!.toggleNewPointButton(true);
 	};
 
 	#onNewPointDestroy = () => {
-		this.#newPointButton!.removeDisabledAttribute();
+		if (this.points.length === 0 && !this.#isLoading) {
+			this.#renderNoPoints();
+		}
+
+		this.#newPointButton!.toggleNewPointButton(false);
 	};
 
-	#handleViewAction = (actionType: UserAction, updateType: UpdateType, update: Point) => {
+	#handleViewAction = async (actionType: UserAction, updateType: UpdateType, update: Point) => {
+		this.#uiBlocker.block();
+
 		switch (actionType) {
 			case 'UPDATE_POINT':
-				this.#pointsModel?.updatePoint(updateType, update);
+				this.#pointPresenters.get(update.id).setSaving();
+				try {
+					await this.#pointsModel.updatePoint(updateType, update);
+				} catch (err) {
+					this.#pointPresenters.get(update.id).setAborting();
+				}
 				break;
 			case 'ADD_POINT':
-				this.#pointsModel?.addPoint(updateType, update);
+				this.#newPointPresenter!.setSaving();
+				try {
+					await this.#pointsModel.addPoint(updateType, update);
+				} catch (err) {
+					this.#newPointPresenter!.setAborting();
+				}
 				break;
 			case 'DELETE_POINT':
-				this.#pointsModel?.deletePoint(updateType, update);
+				this.#pointPresenters.get(update.id).setDeleting();
+				try {
+					await this.#pointsModel.deletePoint(updateType, update);
+				} catch (err) {
+					this.#pointPresenters.get(update.id).setAborting();
+				}
 				break;
 		}
+
+		this.#uiBlocker.unblock();
 	};
 
 	#handleModelEvent = (updateType: UpdateType, payload?: Point) => {
@@ -155,19 +182,29 @@ export default class TripPresenter {
 				this.#handleModelEventChange();
 				break;
 			case 'MAJOR':
+				this.#newPointPresenter!.destroy();
 				this.#handleModelEventChange(true);
 				break;
 			case 'INIT':
 				this.#isLoading = false;
+				if (this.points.length === 0) {
+					this.#renderNoPoints();
+				}
 				this.#handleModelEventChange(true);
 				break;
+			case 'INIT_FAIL':
+				this.#isLoading = false;
+				remove(this.#noPointComponent!);
+				remove(this.#serverMessageComponent!);
+				this.#newPointButton!.toggleNewPointButton(true);
+				this.#renderLoading(ServerMessage.ERROR);
 		}
 	};
 
 	#handleModelFilterChange = (updateType: UpdateType) => {
 		switch (updateType) {
 			case 'MINOR':
-				this.#handleModelEventChange();
+				this.#handleModelEventChange(true);
 				break;
 			case 'MAJOR':
 				this.#handleModelEventChange(true);
@@ -179,15 +216,16 @@ export default class TripPresenter {
 		this.#clearTripList({ resetSortType });
 		remove(this.#tripInfo!);
 		remove(this.#sortComponent!);
-		remove(this.#loadingComponent!);
-		this.#newPointButton!.removeDisabledAttribute();
+		remove(this.#serverMessageComponent!);
+		remove(this.#noPointComponent!);
+		this.#newPointButton!.toggleNewPointButton(false);
 		this.#renderTripInfo();
 		this.#renderTripList();
 	};
 
 	#handleModeChange = () => {
 		this.#newPointPresenter?.destroy();
-		this.#pointPresenters.forEach((presenter) => presenter.resetView());
+		this.#resetPointPresenter();
 	};
 
 	#handleSortChange = (sortType: SortType) => {
@@ -225,6 +263,7 @@ export default class TripPresenter {
 		this.#currentSortType = 'sort-day';
 		this.#filterModel.setFilter('MAJOR', 'everything');
 		this.#renderNewPointPresenter();
+
 	}
 
 	#renderNoPoints() {
@@ -232,12 +271,16 @@ export default class TripPresenter {
 			filterType: this.#filterType,
 		});
 
-		remove(this.#loadingComponent);
 		render(this.#noPointComponent, this.#tripComponent.element, 'afterbegin');
 	}
 
-	#renderLoading() {
-		render(this.#loadingComponent, this.#tripComponent.element, 'afterbegin');
+	#renderLoading(message: string) {
+		this.#serverMessageComponent = new ServerMessageView(message);
+		render(this.#serverMessageComponent, this.#tripComponent.element, 'afterbegin');
+	}
+
+	#resetPointPresenter() {
+		this.#pointPresenters.forEach((presenter) => presenter.resetView());
 	}
 
 	#clearTripList({ resetSortType = false } = {}) {
@@ -258,14 +301,21 @@ export default class TripPresenter {
 
 		this.#renderPoints(this.points, this.allOffers, this.#getDestinations());
 
+		if (this.#newPointPresenter !== null) {
+			remove(this.#noPointComponent!);
+		}
+
 		if (this.points.length === 0 && !this.#isLoading) {
 			this.#renderNoPoints();
 		}
 	}
 
 	#renderTripInfo() {
-		this.#tripInfo = new TripInfoView(this.points, this.#getTotalPrice(this.points), this.#getTotalPriceOffers(this.points), this.#getDestinations());
-		render(this.#tripInfo, this.#infoContainer, 'afterbegin');
+		const points = this.#pointsModel!.points;
+		this.#tripInfo = new TripInfoView(points, this.#getTotalPrice(points), this.#getTotalPriceOffers(points), this.#getDestinations());
+		if (points.length > 0) {
+			render(this.#tripInfo, this.#infoContainer, 'afterbegin');
+		}
 		render(this.#newPointButton!, this.#infoContainer);
 
 		this.#renderSort();
@@ -276,8 +326,8 @@ export default class TripPresenter {
 		this.#renderTripList();
 
 		if (this.#isLoading) {
-			this.#newPointButton!.setDisableAttribute();
-			this.#renderLoading();
+			this.#newPointButton!.toggleNewPointButton(true);
+			this.#renderLoading(ServerMessage.LOADING);
 		}
 	}
 }

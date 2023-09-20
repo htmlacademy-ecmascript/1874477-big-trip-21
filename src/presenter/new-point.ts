@@ -1,4 +1,4 @@
-import PointEditView from '../views/point-edit';
+import PointEditView from '../view/point-edit';
 import { render, remove } from '../framework/render';
 import { NEW_BLANK_POINT } from '../const';
 import { Point, Offer, UpdateType, UserAction, Destination } from '../types-ts';
@@ -41,6 +41,9 @@ export default class NewPointPresenter {
 			destinations: this.#destinations!,
 			onFormSubmit: this.#handleFormSubmit,
 			onDeleteClick: this.#handleDeleteClick,
+			isDeleting: false,
+			isSaving: false,
+			isDisabled: false,
 		});
 
 		render(this.#pointEditComponent, this.#pointContainer!, 'afterbegin');
@@ -61,13 +64,31 @@ export default class NewPointPresenter {
 		document.removeEventListener('keydown', this.#escKeyDownHandler);
 	}
 
+	setSaving() {
+		this.#pointEditComponent!.updateElement({
+			isDisabled: true,
+			isSaving: true,
+		});
+	}
+
+	setAborting() {
+		const resetFormState = () => {
+			this.#pointEditComponent!.updateElement({
+				isDisabled: false,
+				isSaving: false,
+				isDeleting: false,
+			});
+		};
+
+		this.#pointEditComponent!.shake(resetFormState);
+	}
+
 	#handleFormSubmit = (point: Point) => {
 		this.#handleDataChange!(
 			'ADD_POINT',
-			'MINOR',
+			'MAJOR',
 			point,
 		);
-		this.destroy();
 	};
 
 	#handleDeleteClick = () => {

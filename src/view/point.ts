@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 import dayjs from 'dayjs';
-import { getFormattedDateDiff } from '../utils/common';
+import { getFormattedDateDiff } from '../util/common';
 import { Point, OfferItem } from '../types-ts';
 
 function createOffersTemplate(offers: OfferItem[]): string {
@@ -84,11 +84,11 @@ export default class PointView extends AbstractView<HTMLElement> {
 		this.#handleFavoriteClick = onFavoriteClick;
 
 		this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#editClickHandler);
-    this.element.querySelector('.event__favorite-btn')!.addEventListener('click', this.#favoriteClickHandler);
+		this.element.querySelector('.event__favorite-btn')!.addEventListener('click', this.#favoriteClickHandler);
 	}
 
 	get template() {
-		return createPointTemplate(this.#point!,this.#offersForType!, this.#destination);
+		return createPointTemplate(this.#point!, this.#offersForType!, this.#destination);
 	}
 
 	#editClickHandler = (evt: Event) => {

@@ -1,6 +1,6 @@
 type UserAction = 'UPDATE_POINT' | 'ADD_POINT' | 'DELETE_POINT';
 
-type UpdateType = 'PATCH' | 'MINOR' | 'MAJOR' | 'INIT';
+type UpdateType = 'PATCH' | 'MINOR' | 'MAJOR' | 'INIT' | 'INIT_FAIL';
 
 type FilterType = 'everything' | 'future' | 'present' | 'past';
 
@@ -11,12 +11,12 @@ interface Destination {
 	description: string;
 	name: string;
 	pictures: Picture[];
-  }
+}
 
-  interface Picture {
+interface Picture {
 	src: string;
 	description: string;
-  }
+}
 interface Offer {
 	type: string;
 	offers: OfferItem[];
@@ -33,17 +33,17 @@ interface OfferForPoint {
 }
 
 interface Point {
-  id?: string;
-  type: string;
-  destination: Destination | string;
-  dateFrom: string;
+	id?: string;
+	type: string;
+	destination: Destination | string;
+	dateFrom: string;
 	date_from?: string;
-  dateTo: string;
+	dateTo: string;
 	date_to?: string;
-  offers: string[];
-  cost: number;
+	offers: string[];
+	cost: number;
 	base_price?: number;
-  isFavorite: boolean;
+	isFavorite: boolean;
 	is_favorite?: boolean;
 }
 
@@ -62,4 +62,4 @@ interface AdaptedPoint {
 	isFavorite?: boolean;
 }
 
-export { Point, AdaptedPoint, Destination, Picture, Offer, OfferItem , OfferForPoint, UserAction, UpdateType, FilterType, SortType};
+export { Point, AdaptedPoint, Destination, Picture, Offer, OfferItem, OfferForPoint, UserAction, UpdateType, FilterType, SortType };

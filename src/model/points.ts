@@ -1,5 +1,5 @@
-import PointsApiService from '../api/points-api';
-import { AdaptedPoint } from '../api/points-api';
+import PointsApiService from '../api/points';
+import { AdaptedPoint } from '../api/points';
 import Observable from '../framework/observable';
 import { Point, UpdateType } from '../types-ts';
 
@@ -22,16 +22,16 @@ export default class PointsModel extends Observable {
 	}
 
 	async init() {
-		try {
-			const serverPoints: AdaptedPoint[] = await this.#pointsApiService.points;
-			this.#points = serverPoints.map(this.#adaptToClient);
-		} catch (err) {
-			this.#points = [];
-		}
+		const serverPoints: AdaptedPoint[] = await this.#pointsApiService.points;
+		this.#points = serverPoints.map(this.#adaptToClient);
 	}
 
 	notifySuccessLoad() {
 		this._notify('INIT');
+	}
+
+	notifyFailLoad() {
+		this._notify('INIT_FAIL');
 	}
 
 	async updatePoint(updateType: UpdateType, update: Point): Promise<Point> {
