@@ -6,7 +6,6 @@ import he from 'he';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-
 function createTypesTemplate(selectedType: string, isDisabled: boolean) {
 	let template = '';
 
@@ -15,8 +14,8 @@ function createTypesTemplate(selectedType: string, isDisabled: boolean) {
 		const checked = value === selectedType.toLowerCase() ? 'checked' : '';
 		template += /*html*/`
       <div class="event__type-item">
-        <input id="event-type-${value}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}  ${isDisabled ? 'disabled' : ''}>
-        <label class="event__type-label event__type-label--${value}" for="event-type-${value}">${type}</label>
+        <input id="event-type-${he.encode(value)}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}  ${isDisabled ? 'disabled' : ''}>
+        <label class="event__type-label event__type-label--${he.encode(value)}" for="event-type-${he.encode(value)}">${type}</label>
       </div>
     `;
 	});
@@ -35,15 +34,15 @@ function createOffersTemplate(offers: OfferItem[], checkedOffers: string[], isDi
 		  <div class="event__offer-selector">
 			<input class="event__offer-checkbox visually-hidden"
 			  type="checkbox"
-			  id="${offerId}"
-			  name="${offerName}"
+			  id="${he.encode(offerId)}"
+			  name="${he.encode(offerName)}"
 			  ${offerChecked ? 'checked' : ''}
 			  ${isDisabled ? 'disabled' : ''}
 			>
-			<label class="event__offer-label" for="${offerId}">
-			  <span class="event__offer-title">${offerName}</span>
+			<label class="event__offer-label" for="${he.encode(offerId)}">
+			  <span class="event__offer-title">${he.encode(offerName)}</span>
 			  +
-			  &euro;&nbsp;<span class="event__offer__price">${offerPrice}</span>
+			  &euro;&nbsp;<span class="event__offer__price">${he.encode(String(offerPrice))}</span>
 			</label>
 		  </div>
 		`;
@@ -52,7 +51,7 @@ function createOffersTemplate(offers: OfferItem[], checkedOffers: string[], isDi
 }
 
 function createDestinationsTemplate(destinations: Destination[]) {
-	return destinations.map((destination) => `<option value="${destination.name}"></option>`).join('');
+	return destinations.map((destination) => `<option value="${he.encode(destination.name)}"></option>`).join('');
 }
 
 function createPhotosTemplate(photos: Picture[]) {
@@ -65,7 +64,7 @@ function createPhotosTemplate(photos: Picture[]) {
       <div class="event__photos-tape">
         ${photos
 		.filter((photo) => photo.src && photo.description)
-		.map((photo) => `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`)
+		.map((photo) => `<img class="event__photo" src="${he.encode(photo.src)}" alt="${he.encode(photo.description)}">`)
 		.join('')}
       </div>
     </div>`;
@@ -112,7 +111,7 @@ function createEditPointTemplate(
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${he.encode(type.toLowerCase())}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox" ${isDisabled ? 'disabled' : ''}>
 
@@ -128,7 +127,7 @@ function createEditPointTemplate(
             <label class="event__label  event__type-output" for="event-destination-1">
               ${type}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinationName}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destinationName)}" list="destination-list-1" ${isDisabled ? 'disabled' : ''}>
             <datalist id="destination-list-1">
               ${destinationsTemplate}
             </datalist>

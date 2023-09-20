@@ -22,5 +22,4 @@ export default class DestinationsModel extends Observable {
 	async init() {
 		this.#destinations = await this.#destinationsApiService!.destinations;
 	}
-
 }
