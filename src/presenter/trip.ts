@@ -179,7 +179,7 @@ export default class TripPresenter {
 				this.#pointPresenters.get(payload!.id).init(payload);
 				break;
 			case 'MINOR':
-				this.#handleModelEventChange();
+				this.#handleModelEventChange(true);
 				break;
 			case 'MAJOR':
 				this.#newPointPresenter!.destroy();
@@ -311,7 +311,7 @@ export default class TripPresenter {
 	}
 
 	#renderTripInfo() {
-		const points = this.#pointsModel!.points;
+		const points = this.#pointsModel!.points.sort(sortByDate);
 		this.#tripInfo = new TripInfoView(points, this.#getTotalPrice(points), this.#getTotalPriceOffers(points), this.#getDestinations());
 		if (points.length > 0) {
 			render(this.#tripInfo, this.#infoContainer, 'afterbegin');
