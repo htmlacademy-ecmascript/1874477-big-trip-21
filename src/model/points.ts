@@ -1,7 +1,6 @@
 import PointsApiService from '../api/points';
-import { AdaptedPoint } from '../api/points';
 import Observable from '../framework/observable';
-import { Point, UpdateType } from '../types-ts';
+import { Point, UpdateType, AdaptedPoint } from '../types-ts';
 
 export default class PointsModel extends Observable {
 	#pointsApiService: PointsApiService;

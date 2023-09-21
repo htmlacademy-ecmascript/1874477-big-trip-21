@@ -67,5 +67,3 @@ export default class PointsApiService extends ApiService {
 		return adaptedPoint;
 	}
 }
-
-export { AdaptedPoint };
