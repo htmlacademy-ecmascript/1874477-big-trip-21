@@ -15,6 +15,7 @@ export default class PointPresenter {
 	#pointComponent: PointView | null = null;
 	#pointEditComponent: PointEditView | null = null;
 	#point: Point | null = null;
+	#originalPoint: Point | null = null;
 	#allOffers: Offer[] | null = null;
 	#destinations: Destination[] | null = null;
 	#mode = Mode.DEFAULT;
@@ -133,6 +134,7 @@ export default class PointPresenter {
 	}
 
 	#replacePointToForm = () => {
+		this.#originalPoint = { ...this.#point! };
 		replace(this.#pointEditComponent!, this.#pointComponent!);
 		document.addEventListener('keydown', this.#escKeyDownHandler);
 		this.#handleModeChange();
@@ -171,9 +173,15 @@ export default class PointPresenter {
 	};
 
 	#handleEditFormSubmit = (point: Point) => {
+		const isMajorUpdate =
+			this.#originalPoint?.dateTo !== point.dateTo ||
+			this.#originalPoint?.dateFrom !== point.dateFrom ||
+			this.#originalPoint?.type !== point.type ||
+			this.#originalPoint?.destination !== point.destination;
+
 		this.#handleDataChange!(
 			'UPDATE_POINT',
-			'MINOR',
+			isMajorUpdate ? 'MAJOR' : 'MINOR',
 			point,
 		);
 	};

@@ -179,25 +179,19 @@ export default class TripPresenter {
 				this.#pointPresenters.get(payload!.id).init(payload);
 				break;
 			case 'MINOR':
-				this.#handleModelEventChange(true);
+				this.#handleModelEventChange();
 				break;
 			case 'MAJOR':
-				this.#newPointPresenter!.destroy();
+				this.#newPointPresenter?.destroy();
 				this.#handleModelEventChange(true);
 				break;
 			case 'INIT':
 				this.#isLoading = false;
-				if (this.points.length === 0) {
-					this.#renderNoPoints();
-				}
 				this.#handleModelEventChange(true);
 				break;
 			case 'INIT_FAIL':
 				this.#isLoading = false;
-				remove(this.#noPointComponent!);
-				remove(this.#serverMessageComponent!);
-				this.#newPointButton!.toggleNewPointButton(true);
-				this.#renderLoading(ServerMessage.ERROR);
+				this.#handleModelInitFail();
 		}
 	};
 
@@ -212,15 +206,27 @@ export default class TripPresenter {
 		}
 	};
 
-	#handleModelEventChange = (resetSortType = false) => {
+	#handleModelEventChange = (resetSortType = false, noPoints = this.points.length === 0) => {
 		this.#clearTripList({ resetSortType });
 		remove(this.#tripInfo!);
-		remove(this.#sortComponent!);
 		remove(this.#serverMessageComponent!);
 		remove(this.#noPointComponent!);
 		this.#newPointButton!.toggleNewPointButton(false);
+		if (resetSortType || noPoints) {
+			remove(this.#sortComponent!);
+			if (!noPoints) {
+				this.#renderSort();
+			}
+		}
 		this.#renderTripInfo();
 		this.#renderTripList();
+	};
+
+	#handleModelInitFail = () => {
+		remove(this.#noPointComponent!);
+		remove(this.#serverMessageComponent!);
+		this.#newPointButton!.toggleNewPointButton(true);
+		this.#renderLoading(ServerMessage.ERROR);
 	};
 
 	#handleModeChange = () => {
@@ -318,7 +324,6 @@ export default class TripPresenter {
 		}
 		render(this.#newPointButton!, this.#infoContainer);
 
-		this.#renderSort();
 	}
 
 	#renderTrip() {
