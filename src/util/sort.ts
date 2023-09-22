@@ -13,5 +13,4 @@ function sortByDate(a: Point, b: Point): number {
 	return dayjs(a.dateFrom).diff(dayjs(b.dateFrom));
 }
 
-
 export { sortByPrice, sortByDuration, sortByDate };

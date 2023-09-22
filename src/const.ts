@@ -1,157 +1,55 @@
-import { Point, Offers, FilterType } from './types-ts';
-import dayjs from 'dayjs';
-
-const now = dayjs();
-
-const Mode = {
-	DEFAULT: 'DEFAULT',
-	EDITING: 'EDITING',
-	CREATING: 'CREATING',
-};
+import { Point } from './types-ts';
 
 const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'] as const;
-const FILTER_TYPES = ['everything', 'future', 'present', 'past'] as const;
-const SORT_TYPES = ['sort-price', 'sort-time', 'sort-day'] as const;
+const AUTHORIZATION = 'Basic dsWewwes5dweq52645';
+const API_POINT = 'https://21.objects.pages.academy/big-trip';
+
+const enum ServerMessage {
+	LOADING = 'Loading...',
+	ERROR = 'Failed to load latest route information'
+}
+
+const enum Method {
+	GET = 'GET',
+	PUT = 'PUT',
+	POST = 'POST',
+	DELETE = 'DELETE'
+}
+
+const enum Mode {
+	DEFAULT = 'DEFAULT',
+	EDITING = 'EDITING',
+	CREATING = 'CREATING',
+}
+
+const enum TimeLimit {
+	LOWER_LIMIT = 350,
+	UPPER_LIMIT = 1000,
+}
+
+const NEW_BLANK_POINT: Point = {
+	type: 'flight',
+	destination: {
+		id: '',
+		name: '',
+		description: '',
+		pictures: []
+	},
+	dateFrom: '',
+	dateTo: '',
+	offers: [''],
+	cost: 0,
+	isFavorite: false,
+};
+
 const EMPTY_MESSAGES = ['Click New Event to create your first point', 'There are no past events now',
 	'There are no present events now', 'There are no future events now'] as const;
 
-const FILTER_FUNCTIONS: Record<FilterType, (points: Point[]) => Point[]> = {
-	everything: (points) => points,
-	future: (points) => points.filter((point) => now.isBefore(point.dateFrom)),
-	present: (points) => points.filter((point) => now.isAfter(point.dateTo) && now.isBefore(point.dateFrom)),
-	past: (points) => points.filter((point) => now.isAfter(point.dateTo)),
+const EmptyListMessage = {
+	['everything']: EMPTY_MESSAGES[0],
+	['future']: EMPTY_MESSAGES[3],
+	['present']: EMPTY_MESSAGES[2],
+	['past']: EMPTY_MESSAGES[1],
 };
 
-const NoPointsTextType = {
-	[FILTER_TYPES[0]]: EMPTY_MESSAGES[0],
-	[FILTER_TYPES[1]]: EMPTY_MESSAGES[3],
-	[FILTER_TYPES[2]]: EMPTY_MESSAGES[2],
-	[FILTER_TYPES[3]]: EMPTY_MESSAGES[1],
-};
-
-const AllOffers: Offers = {
-	'Taxi': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Transfer',
-			cost: 80,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Upgrade to comfort class',
-			cost: 100,
-			checked: false,
-		}
-	],
-
-	'Bus': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Upgrade to comfort class',
-			cost: 150,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Choose seats',
-			cost: 33,
-			checked: false,
-		}
-	],
-
-	'Train': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Choose seats',
-			cost: 250,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Order meal',
-			cost: 45,
-			checked: false,
-		}
-	],
-
-	'Ship': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Choose seats',
-			cost: 250,
-			checked: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Order meal',
-			cost: 45,
-			checked: false,
-		}
-	],
-
-	'Flight': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Extra Luggage',
-			cost: 150,
-			checked: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Eat in travel',
-			cost: 12200,
-			checked: true,
-		}
-	],
-
-	'Check-in': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Lunch',
-			cost: 320,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Dinner',
-			cost: 120,
-			checked: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Choose the time of check-in',
-			cost: 50,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Choose the time of check-out',
-			cost: 50,
-			checked: false,
-		},
-	],
-
-	'Restaurant': [
-		{
-			id: crypto.randomUUID(),
-			name: 'Order a meal from the restaurant',
-			cost: 2000,
-			checked: false,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Switch place',
-			cost: 2500,
-			checked: true,
-		},
-		{
-			id: crypto.randomUUID(),
-			name: 'Business lounge',
-			cost: 8220,
-			checked: true,
-		}
-	],
-};
-
-export { Mode, FILTER_FUNCTIONS, POINT_TYPES, FILTER_TYPES, EMPTY_MESSAGES, SORT_TYPES, AllOffers, NoPointsTextType };
+export { AUTHORIZATION, API_POINT, ServerMessage, Method, Mode, TimeLimit, NEW_BLANK_POINT, POINT_TYPES, EMPTY_MESSAGES, EmptyListMessage };

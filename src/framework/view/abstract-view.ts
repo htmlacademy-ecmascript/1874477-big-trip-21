@@ -1,8 +1,6 @@
 import { createElement } from '../render';
 import './abstract-view.css';
 
-type shakeCallback = () => void;
-
 const enum SnakeAnimation {
       CLASS_NAME = 'shake',
       ANIMATION_TIMEOUT = 600,
@@ -25,7 +23,6 @@ export default class AbstractView<El extends Element = HTMLDivElement> {
 		return this.#element;
 	}
 
-
 	get template(): string {
 		throw new Error('Abstract method not implemented: get template');
 	}
@@ -34,7 +31,7 @@ export default class AbstractView<El extends Element = HTMLDivElement> {
 		this.#element = null;
 	}
 
-	shake(callback: shakeCallback) {
+	shake(callback?: () => void) {
 		this.element.classList.add(SnakeAnimation.CLASS_NAME);
 		setTimeout(() => {
 			this.element.classList.remove(SnakeAnimation.CLASS_NAME);

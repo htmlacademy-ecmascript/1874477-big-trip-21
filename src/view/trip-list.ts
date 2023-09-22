@@ -1,7 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 
-const TripListTemplate: string = '<ul class="trip-events__list"></ul>';
-
+const TRIP_LIST_TEMPLATE: string = '<ul class="trip-events__list"></ul>';
 
 export default class TripListView extends AbstractView<HTMLElement> {
 	constructor() {
@@ -9,7 +8,7 @@ export default class TripListView extends AbstractView<HTMLElement> {
 	}
 
 	get template() {
-		return TripListTemplate;
+		return TRIP_LIST_TEMPLATE;
 	}
 
 	clearPointList() {
