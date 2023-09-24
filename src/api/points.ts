@@ -52,7 +52,7 @@ export default class PointsApiService extends ApiService {
 	}
 
 	#adaptToServer(point: Point) {
-		const adaptedPoint: AdaptedPoint = {...point,
+		const adaptedPoint: Partial<Point> & AdaptedPoint = {...point,
 			'base_price': point.cost,
 			'date_from': point.dateFrom,
 			'date_to': point.dateTo,

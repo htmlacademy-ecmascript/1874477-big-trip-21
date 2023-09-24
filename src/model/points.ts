@@ -88,7 +88,7 @@ export default class PointsModel extends Observable {
 	}
 
 	#adaptToClient(point: AdaptedPoint): Point {
-		const adaptedPoint: Point = {
+		const adaptedPoint: Point & Partial<AdaptedPoint> = {
 			...point,
 			dateFrom: point.date_from,
 			dateTo: point.date_to,

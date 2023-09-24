@@ -37,29 +37,17 @@ interface Point {
 	type: string;
 	destination: Destination | string;
 	dateFrom: string;
-	date_from?: string;
 	dateTo: string;
-	date_to?: string;
 	offers: string[];
 	cost: number;
-	base_price?: number;
 	isFavorite: boolean;
-	is_favorite?: boolean;
 }
 
-interface AdaptedPoint {
-	id?: string;
-	type: string;
-	destination: Destination | string;
-	offers: string[];
+interface AdaptedPoint extends Omit<Point, 'dateFrom' | 'dateTo' | 'cost' | 'isFavorite'> {
 	base_price: number;
-	cost?: number;
 	date_from: string;
-	dateFrom?: string;
 	date_to: string;
-	dateTo?: string;
 	is_favorite: boolean;
-	isFavorite?: boolean;
 }
 
 export { Point, AdaptedPoint, Destination, Picture, Offer, OfferItem, OfferForPoint, UserAction, UpdateType, FilterType, SortType };
