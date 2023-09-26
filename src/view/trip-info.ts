@@ -12,11 +12,7 @@ function createTripInfoTemplate(points: Point[], totalCost: number, offersPrice:
 		const allDestinations = destination.find((item) => item.id === pointDestinationId);
 		let destinationName = '';
 
-		if (allDestinations !== undefined) {
-			destinationName = allDestinations.name.toString();
-		} else {
-			destinationName = '';
-		}
+		destinationName = allDestinations !== undefined ? allDestinations.name.toString() : '';
 
 		return destinationName;
 	});
@@ -39,7 +35,7 @@ function createTripInfoTemplate(points: Point[], totalCost: number, offersPrice:
 
 	return /*html*/`<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
-      <h1 class="trip-info__title">${he.encode(tripTitle)}</h1>
+      <h1 class="trip-info__title">${he.encode(tripTitle!)}</h1>
       <p class="trip-info__dates">${tripDates}</p>
     </div>
 

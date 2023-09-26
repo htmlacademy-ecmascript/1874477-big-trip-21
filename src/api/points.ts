@@ -8,9 +8,8 @@ export default class PointsApiService extends ApiService {
 			.then((response: Response | undefined) => {
 				if (response) {
 					return ApiService.parseResponse(response);
-				} else {
-					throw new Error('Invalid response');
 				}
+				throw new Error('Invalid response');
 			});
 	}
 
@@ -52,7 +51,8 @@ export default class PointsApiService extends ApiService {
 	}
 
 	#adaptToServer(point: Point) {
-		const adaptedPoint: Partial<Point> & AdaptedPoint = {...point,
+		const adaptedPoint: Partial<Point> & AdaptedPoint = {
+			...point,
 			'base_price': point.cost,
 			'date_from': point.dateFrom,
 			'date_to': point.dateTo,

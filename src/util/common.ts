@@ -23,16 +23,23 @@ function formattedCityNames(cities: string[]) {
 	const validCities = cities.filter((city) => city && city.trim() !== '');
 	const numCities = validCities.length;
 
-	if (numCities === 0) {
-		return '';
-	} else if (numCities === 1) {
-		return validCities[0];
-	} else if (numCities === 2 && validCities.length === 2) {
-		return `${validCities[0]} — ${validCities[1]}`;
-	} else if (numCities === 3 && validCities.length === 3) {
-		return `${validCities[0]} — ${validCities[1]}  — ${validCities[2]}`;
-	} else {
-		return `${validCities[0]} —...— ${validCities[numCities - 1]}`;
+	switch (numCities) {
+		case 0:
+			return '';
+		case 1:
+			return validCities[0];
+		case 2:
+			if (validCities.length === 2) {
+				return `${validCities[0]} — ${validCities[1]}`;
+			}
+			break;
+		case 3:
+			if (validCities.length === 3) {
+				return `${validCities[0]} — ${validCities[1]} — ${validCities[2]}`;
+			}
+			break;
+		default:
+			return `${validCities[0]} —...— ${validCities[numCities - 1]}`;
 	}
 }
 

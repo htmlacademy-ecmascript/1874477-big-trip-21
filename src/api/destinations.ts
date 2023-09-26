@@ -6,9 +6,8 @@ export default class DestinationsApiService extends ApiService {
 			.then((response: Response | undefined) => {
 				if (response) {
 					return ApiService.parseResponse(response);
-				} else {
-					throw new Error('Invalid response');
 				}
+				throw new Error('Invalid response');
 			});
 	}
 }

@@ -87,6 +87,8 @@ function createEditPointTemplate(
 	const dateStart = dateFrom ? dayjs(dateFrom).format('DD/MM/YY HH:mm') : '';
 	const dateEnd = dateTo ? dayjs(dateTo).format('DD/MM/YY HH:mm') : '';
 
+	const cancelButtonText = 'Cancel';
+	const deleteButtonText = isDeleting ? 'Deleting...' : 'Delete';
 	let buttonTemplate = '';
 	let buttonResetTemplate = '';
 
@@ -98,11 +100,7 @@ function createEditPointTemplate(
 	  `;
 	}
 
-	if (isDeleting) {
-		buttonResetTemplate = isNewBlankPoint ? 'Cancel' : 'Deleting...';
-	} else {
-		buttonResetTemplate = isNewBlankPoint ? 'Cancel' : 'Delete';
-	}
+	buttonResetTemplate = isNewBlankPoint ? cancelButtonText : deleteButtonText;
 
 	return /*html*/`
     <li class="trip-events__item">
@@ -331,7 +329,7 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 	}
 
 	#pointStartDateChangeHandler = (userDateAndTime: Date) => {
-		this.updateElement({
+		this._setState({
 			point: {
 				...this._state.point,
 				dateFrom: userDateAndTime.toISOString(),
@@ -340,7 +338,7 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 	};
 
 	#pointEndDateChangeHandler = (userDateAndTime: Date) => {
-		this.updateElement({
+		this._setState({
 			point: {
 				...this._state.point,
 				dateTo: userDateAndTime.toISOString(),
@@ -383,7 +381,6 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 				offers: offers
 			},
 			offers: this.#offersForType
-
 		});
 	};
 
@@ -408,23 +405,13 @@ export default class PointEditView extends AbstractStatefulView<PointEditState, 
 		evt.preventDefault();
 		const targetInput = evt.target as HTMLInputElement;
 		const offerId = targetInput.id;
-		const updatedOffers = [...this._state.point.offers];
+		const existingOffers = this._state.point.offers.filter((id) => id !== '');
 
-		for (let i = updatedOffers.length - 1; i >= 0; i--) {
-			if (updatedOffers[i] === '') {
-				updatedOffers.splice(i, 1);
-			}
-		}
+		const updatedOffers = existingOffers.includes(offerId)
+			? existingOffers.filter((id) => id !== offerId)
+			: existingOffers.concat(offerId);
 
-		if (!updatedOffers.includes(offerId)) {
-			updatedOffers.push(offerId);
-		} else {
-			const index = updatedOffers.indexOf(offerId);
-			updatedOffers.splice(index, 1);
-		}
-
-		this.updateElement({
-			...this._state,
+		this._setState({
 			point: {
 				...this._state.point,
 				offers: updatedOffers,
