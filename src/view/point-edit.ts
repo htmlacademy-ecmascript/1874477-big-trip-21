@@ -110,18 +110,12 @@ function createEditPointTemplate(
 
   const cancelButtonText = 'Cancel';
   const deleteButtonText = isDeleting ? 'Deleting...' : 'Delete';
-  let buttonTemplate = '';
-  let buttonResetTemplate = '';
-
-  if (!isNewBlankPoint) {
-    buttonTemplate = `
-		<button class="event__rollup-btn" type="button">
-		  <span class="visually-hidden">Open event</span>
-		</button>
-	  `;
-  }
-
-  buttonResetTemplate = isNewBlankPoint ? cancelButtonText : deleteButtonText;
+  const buttonTemplate = isNewBlankPoint ? '' : `
+  <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+  </button>
+  `;
+  const buttonResetTemplate = isNewBlankPoint ? cancelButtonText : deleteButtonText;
 
   return /*html*/`
     <li class="trip-events__item">
