@@ -5,17 +5,17 @@ import { Point } from '../types-ts';
 type ObserverCallback = (event: UpdateType, payload?: any) => void;
 
 export default class Observable {
-	#observers = new Set<ObserverCallback>();
+  #observers = new Set<ObserverCallback>();
 
-	addObserver(observer: ObserverCallback) {
-		this.#observers.add(observer);
-	}
+  addObserver(observer: ObserverCallback) {
+    this.#observers.add(observer);
+  }
 
-	removeObserver(observer: ObserverCallback) {
-		this.#observers.delete(observer);
-	}
+  removeObserver(observer: ObserverCallback) {
+    this.#observers.delete(observer);
+  }
 
-	_notify(event: UpdateType, payload?: Point | FilterType) {
-		this.#observers.forEach((observer) => observer(event, payload));
-	}
+  _notify(event: UpdateType, payload?: Point | FilterType) {
+    this.#observers.forEach((observer) => observer(event, payload));
+  }
 }

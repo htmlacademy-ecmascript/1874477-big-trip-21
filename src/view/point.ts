@@ -5,33 +5,33 @@ import { Point, OfferItem } from '../types-ts';
 import he from 'he';
 
 function createOffersTemplate(offers: OfferItem[]): string {
-	if (!offers) {
-		return '';
-	}
+  if (!offers) {
+    return '';
+  }
 
-	return offers
-		.filter((offer) => offer)
-		.map(
-			(offer) => /*html*/`
+  return offers
+    .filter((offer) => offer)
+    .map(
+      (offer) => /*html*/`
       <li class="event__offer">
         <span class="event__offer-title">${he.encode(offer.title)}</span>
         &plus;&euro;&nbsp;
         <span class="event__offer-price">${he.encode(String(offer.price))}</span>
       </li>`
-		)
-		.join('');
+    )
+    .join('');
 }
 
 function createPointTemplate({ type, dateFrom, dateTo, offers, cost, isFavorite }: Point, offersForType: OfferItem[], destinationName: string): string {
-	const filteredOffers = offersForType.filter((offer) => offers.some((id) => String(id) === offer.id));
-	const offersTemplate = createOffersTemplate(filteredOffers);
-	const startDate = new Date(dateFrom);
-	const endDate = new Date(dateTo);
-	const dateForPoint = dayjs(startDate).format('MMM DD');
-	const dateStart = dayjs(startDate).format('HH:mm');
-	const dateEnd = dayjs(endDate).format('HH:mm');
+  const filteredOffers = offersForType.filter((offer) => offers.some((id) => String(id) === offer.id));
+  const offersTemplate = createOffersTemplate(filteredOffers);
+  const startDate = new Date(dateFrom);
+  const endDate = new Date(dateTo);
+  const dateForPoint = dayjs(startDate).format('MMM DD');
+  const dateStart = dayjs(startDate).format('HH:mm');
+  const dateEnd = dayjs(endDate).format('HH:mm');
 
-	return /*html*/`
+  return /*html*/`
     <li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="${dateForPoint}">${dateForPoint}</time>
@@ -69,40 +69,40 @@ function createPointTemplate({ type, dateFrom, dateTo, offers, cost, isFavorite 
 }
 
 export default class PointView extends AbstractView<HTMLElement> {
-	#point: Point | null = null;
-	#offersForType: OfferItem[] | null = null;
-	#destination: string;
-	#handleEditClick: ((point: Point | null) => void) | null = null;
-	#handleFavoriteClick: ((point: Point | null) => void) | null = null;
+  #point: Point | null = null;
+  #offersForType: OfferItem[] | null = null;
+  #destination: string;
+  #handleEditClick: ((point: Point | null) => void) | null = null;
+  #handleFavoriteClick: ((point: Point | null) => void) | null = null;
 
-	constructor({ point, destination, offersForType, onEditClick, onFavoriteClick }: { point: Point, destination: string, offersForType: OfferItem[], onEditClick: ((point: Point | null) => void) | null, onFavoriteClick: ((point: Point | null) => void) | null }) {
-		super();
+  constructor({ point, destination, offersForType, onEditClick, onFavoriteClick }: { point: Point, destination: string, offersForType: OfferItem[], onEditClick: ((point: Point | null) => void) | null, onFavoriteClick: ((point: Point | null) => void) | null }) {
+    super();
 
-		this.#point = point;
-		this.#destination = destination;
-		this.#offersForType = offersForType;
-		this.#handleEditClick = onEditClick;
-		this.#handleFavoriteClick = onFavoriteClick;
+    this.#point = point;
+    this.#destination = destination;
+    this.#offersForType = offersForType;
+    this.#handleEditClick = onEditClick;
+    this.#handleFavoriteClick = onFavoriteClick;
 
 		this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#editClickHandler);
 		this.element.querySelector('.event__favorite-btn')!.addEventListener('click', this.#favoriteClickHandler);
-	}
+  }
 
-	get template() {
-		return createPointTemplate(this.#point!, this.#offersForType!, this.#destination);
-	}
+  get template() {
+    return createPointTemplate(this.#point!, this.#offersForType!, this.#destination);
+  }
 
-	#editClickHandler = (evt: Event) => {
-		evt.preventDefault();
-		this.#handleEditClick?.(this.#point);
-	};
+  #editClickHandler = (evt: Event) => {
+    evt.preventDefault();
+    this.#handleEditClick?.(this.#point);
+  };
 
-	#favoriteClickHandler = (evt: Event) => {
-		evt.preventDefault();
-		this.#handleFavoriteClick?.(this.#point);
-	};
+  #favoriteClickHandler = (evt: Event) => {
+    evt.preventDefault();
+    this.#handleFavoriteClick?.(this.#point);
+  };
 
-	removePoints() {
-		this.element.remove();
-	}
+  removePoints() {
+    this.element.remove();
+  }
 }
