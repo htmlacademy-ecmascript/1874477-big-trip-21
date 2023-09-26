@@ -18,23 +18,23 @@ const destinationsModel = new DestinationsModel({ destinationsApiService: new De
 const filterModel = new FilterModel();
 
 Promise.all([offersModel.init(), destinationsModel.init(), pointsModel.init()]).then(() => {
-	pointsModel.notifySuccessLoad();
+  pointsModel.notifySuccessLoad();
 }, () => {
-	pointsModel.notifyFailLoad();
+  pointsModel.notifyFailLoad();
 });
 
 const filterPresenter = new FilterPresenter({
-	filterContainer: infoContainer,
-	pointsModel: pointsModel,
-	filterModel: filterModel
+  filterContainer: infoContainer,
+  pointsModel: pointsModel,
+  filterModel: filterModel
 });
 const tripPresenter = new TripPresenter({
-	infoContainer: infoContainer,
-	tripContainer: tripContainer,
-	pointsModel: pointsModel,
-	offersModel: offersModel,
-	destinationsModel: destinationsModel,
-	filterModel: filterModel
+  infoContainer: infoContainer,
+  tripContainer: tripContainer,
+  pointsModel: pointsModel,
+  offersModel: offersModel,
+  destinationsModel: destinationsModel,
+  filterModel: filterModel
 });
 
 filterPresenter.init();
