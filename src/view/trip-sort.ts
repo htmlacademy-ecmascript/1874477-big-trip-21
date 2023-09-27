@@ -39,7 +39,7 @@ export default class TripTripSortView extends AbstractView<HTMLElement> {
     super();
     this.#onSortChange = onSortChange;
 
-    this.element.addEventListener('change', this.#handleSortChange);
+    this.element.addEventListener('change', this.#sortChangeHandler);
   }
 
   get template() {
@@ -53,7 +53,7 @@ export default class TripTripSortView extends AbstractView<HTMLElement> {
     }
   }
 
-  #handleSortChange = (evt: Event) => {
+  #sortChangeHandler = (evt: Event) => {
     const target = evt.target as HTMLInputElement;
     this.#onSortChange(target.value as SortType);
   };
