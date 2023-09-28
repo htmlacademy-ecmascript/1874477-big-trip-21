@@ -152,7 +152,6 @@ export default class PointPresenter {
       evt.preventDefault();
       this.#pointEditComponent!.reset(this.#point!);
       this.#replaceFormToPoint();
-
     }
   };
 

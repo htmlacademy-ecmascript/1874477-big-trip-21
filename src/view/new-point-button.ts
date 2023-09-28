@@ -22,6 +22,6 @@ export default class NewPointButtonView extends AbstractView<HTMLButtonElement> 
   #clickHandler = (evt: Event) => {
     evt.preventDefault();
     this.toggleNewPointButton();
-		this.#handleClick!();
+    this.#handleClick!();
   };
 }

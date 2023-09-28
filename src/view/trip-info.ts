@@ -33,7 +33,8 @@ function createTripInfoTemplate(points: Point[], totalCost: number, offersPrice:
 
   const costHtml = (totalPrice === 0) ? '' : `Total: &euro;&nbsp;<span class="trip-info__cost-value">${he.encode(String(totalPrice))}</span>`;
 
-  return /*html*/`<section class="trip-main__trip-info  trip-info">
+  return /*html*/`
+  <section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">${he.encode(tripTitle!)}</h1>
       <p class="trip-info__dates">${tripDates}</p>
