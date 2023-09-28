@@ -54,4 +54,3 @@ export default class TripFilterView extends AbstractView<HTMLElement> {
     this.#onFilterChange(target.value as FilterType);
   };
 }
-
