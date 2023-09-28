@@ -3,7 +3,25 @@ import { EmptyListMessage } from '../const';
 import { FilterType } from '../types-ts';
 
 function createEmptyListMessage(filterType: FilterType) {
-  const emptyListMessage = EmptyListMessage[filterType];
+  let emptyListMessage: EmptyListMessage;
+
+  switch (filterType) {
+    case 'everything':
+      emptyListMessage = EmptyListMessage.EVERYTHING;
+      break;
+    case 'future':
+      emptyListMessage = EmptyListMessage.FUTURE;
+      break;
+    case 'present':
+      emptyListMessage = EmptyListMessage.PRESENT;
+      break;
+    case 'past':
+      emptyListMessage = EmptyListMessage.PAST;
+      break;
+    default:
+      throw new Error('Invalid filter type');
+  }
+
   return /*html*/`<p class="trip-events__msg"> ${emptyListMessage}</p>`;
 }
 

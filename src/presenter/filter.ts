@@ -6,9 +6,9 @@ import FilterModel from '../model/filter';
 import PointsModel from '../model/points';
 
 interface FilterPresenterProps {
-	filterContainer: HTMLElement,
-	filterModel: FilterModel,
-	pointsModel: PointsModel
+  filterContainer: HTMLElement,
+  filterModel: FilterModel,
+  pointsModel: PointsModel
 }
 
 export default class FilterPresenter {

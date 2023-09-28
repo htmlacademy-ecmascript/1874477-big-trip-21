@@ -39,4 +39,3 @@ export default class AbstractView<El extends Element = HTMLDivElement> {
     }, SnakeAnimation.ANIMATION_TIMEOUT);
   }
 }
-

@@ -37,8 +37,7 @@ function createTypesTemplate(selectedType: string, isDisabled: boolean) {
       <div class="event__type-item">
         <input id="event-type-${he.encode(value)}" class="event__type-input visually-hidden" type="radio" name="event-type" value="${value}" ${checked}  ${isDisabled ? 'disabled' : ''}>
         <label class="event__type-label event__type-label--${he.encode(value)}" for="event-type-${he.encode(value)}">${type}</label>
-      </div>
-    `;
+      </div>`;
   });
 
   return template;
@@ -51,24 +50,17 @@ function createOffersTemplate(offers: OfferItem[], checkedOffers: string[], isDi
       const offerName = offer.title;
       const offerChecked = checkedOffers.includes(offerId);
       const offerPrice = offer.price;
-      return `
-		  <div class="event__offer-selector">
-			<input class="event__offer-checkbox visually-hidden"
-			  type="checkbox"
-			  id="${he.encode(offerId)}"
-			  name="${he.encode(offerName)}"
-			  ${offerChecked ? 'checked' : ''}
-			  ${isDisabled ? 'disabled' : ''}
-			>
-			<label class="event__offer-label" for="${he.encode(offerId)}">
-			  <span class="event__offer-title">${he.encode(offerName)}</span>
-			  +
-			  &euro;&nbsp;<span class="event__offer__price">${he.encode(String(offerPrice))}</span>
-			</label>
-		  </div>
-		`;
-    })
-    .join('');
+      return /*html*/`
+      <div class="event__offer-selector">
+          <input class="event__offer-checkbox visually-hidden" type="checkbox" id="${he.encode(offerId)}"
+              name="${he.encode(offerName)}" ${offerChecked ? 'checked' : '' } ${isDisabled ? 'disabled' : '' }>
+          <label class="event__offer-label" for="${he.encode(offerId)}">
+              <span class="event__offer-title">${he.encode(offerName)}</span>
+              +
+              &euro;&nbsp;<span class="event__offer__price">${he.encode(String(offerPrice))}</span>
+          </label>
+      </div>`;
+    }).join('');
 }
 
 function createDestinationsTemplate(destinations: Destination[]) {
@@ -83,8 +75,7 @@ function createPhotosTemplate(photos: Picture[]) {
   return /*html*/`
     <div class="event__photos-container">
       <div class="event__photos-tape">
-        ${photos
-    .filter((photo) => photo.src && photo.description)
+        ${photos.filter((photo) => photo.src && photo.description)
     .map((photo) => `<img class="event__photo" src="${he.encode(photo.src)}" alt="${he.encode(photo.description)}">`)
     .join('')}
       </div>
@@ -110,11 +101,11 @@ function createEditPointTemplate(
 
   const cancelButtonText = 'Cancel';
   const deleteButtonText = isDeleting ? 'Deleting...' : 'Delete';
-  const buttonTemplate = isNewBlankPoint ? '' : `
-  <button class="event__rollup-btn" type="button">
-    <span class="visually-hidden">Open event</span>
-  </button>
-  `;
+  const buttonTemplate = isNewBlankPoint ? '' : /*html*/`
+    <button class="event__rollup-btn" type="button">
+      <span class="visually-hidden">Open event</span>
+    </button>`;
+
   const buttonResetTemplate = isNewBlankPoint ? cancelButtonText : deleteButtonText;
 
   return /*html*/`
