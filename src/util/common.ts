@@ -1,22 +1,25 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
+
 dayjs.extend(duration);
 
+const enum TimeDiff {
+  Day = 60 * 60 * 24 * 1000,
+}
+
 function getFormattedDateDiff(date1: Date, date2: Date): string {
-  const dateDiff = Math.abs(dayjs(date2).diff(date1));
-  const formattedDate = dayjs.duration(dateDiff).format('DD[D] HH[H] mm[M]');
-  const parts = formattedDate.split(' ');
+  const diff = Math.abs(dayjs(date2).diff(date1));
 
-  const resultParts = [
-    (parseInt(parts[0], 10) > 0 && parts[0] !== '00') ? `${parts[0]}` : '',
-    (parts[1] !== '00' && parseInt(parts[0], 10) > 0) || (parseInt(parts[1], 10) > 0) ? parts[1] : '',
-    parts[2] !== '00' ? parts[2] : ''
-  ];
+  const days = Math.floor(diff / TimeDiff.Day);
 
-  const formattedResultDate = resultParts.filter((part) => part !== '').join(' ');
+  const withUnits = dayjs.duration(diff).format('DD[D] HH[H] mm[M]').split(' ');
 
-  return formattedResultDate.trim();
+  if (dayjs.duration(diff).get('day') !== days) {
+    withUnits[0] = `${days}D`;
+  }
+
+  return withUnits.join(' ');
 }
 
 function formattedCityNames(cities: string[]) {
