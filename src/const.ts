@@ -2,19 +2,14 @@ import { Point } from './types-ts';
 
 const POINT_TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'] as const;
 const AUTHORIZATION = 'Basic dsWewwes5dweq52645';
-const API_POINT = 'https://21.objects.pages.academy/big-trip';
+const API_POINT = 'https://22.objects.htmlacademy.pro/big-trip';
 
 const enum ServerMessage {
   LOADING = 'Loading...',
   ERROR = 'Failed to load latest route information'
 }
 
-const enum Method {
-  GET = 'GET',
-  PUT = 'PUT',
-  POST = 'POST',
-  DELETE = 'DELETE'
-}
+type Method = 'GET' | 'PUT' | 'POST' | 'DELETE';
 
 const enum Mode {
   DEFAULT = 'DEFAULT',
@@ -50,4 +45,5 @@ const NEW_BLANK_POINT: Point = {
   isFavorite: false,
 };
 
-export { AUTHORIZATION, API_POINT, ServerMessage, Method, Mode, TimeLimit, NEW_BLANK_POINT, POINT_TYPES, EmptyListMessage };
+export { AUTHORIZATION, API_POINT, ServerMessage, Mode, TimeLimit, NEW_BLANK_POINT, POINT_TYPES, EmptyListMessage };
+export type { Method };

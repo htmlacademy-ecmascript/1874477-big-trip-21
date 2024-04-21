@@ -1,6 +1,8 @@
+import type { Method } from '../const';
+
 interface ApiConfig {
 	url: string;
-	method: string;
+	method: Method;
 	body: string | null;
 	headers: Headers | undefined;
 }
@@ -19,12 +21,6 @@ export default class ApiService {
 
   /**
    * Метод для отправки запроса к серверу
-   * @param {Object} config Объект с настройками
-   * @param {string} config.url Адрес относительно сервера
-   * @param {string} [config.method] Метод запроса
-   * @param {string} [config.body] Тело запроса
-   * @param {Headers} [config.headers] Заголовки запроса
-   * @returns {Promise<Response>}
    */
   async _load(config: ApiConfig): Promise<Response | undefined> {
     const { url, method = 'GET', body = null, headers = new Headers() } = config;
