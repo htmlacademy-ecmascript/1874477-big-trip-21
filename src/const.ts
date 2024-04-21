@@ -12,22 +12,15 @@ const enum ServerMessage {
 type Method = 'GET' | 'PUT' | 'POST' | 'DELETE';
 
 const enum Mode {
-  DEFAULT = 'DEFAULT',
-  EDITING = 'EDITING',
-  CREATING = 'CREATING',
+  DEFAULT,
+  EDITING,
+  CREATING,
 }
 
 const enum TimeLimit {
   TIMEOUT = 3000,
   LOWER_LIMIT = 350,
   UPPER_LIMIT = 1000,
-}
-
-const enum EmptyListMessage {
-  EVERYTHING = 'Click New Event to create your first point',
-  FUTURE = 'There are no future events now',
-  PRESENT = 'There are no present events now',
-  PAST = 'There are no past events now',
 }
 
 const NEW_BLANK_POINT: Point = {
@@ -45,5 +38,5 @@ const NEW_BLANK_POINT: Point = {
   isFavorite: false,
 };
 
-export { AUTHORIZATION, API_POINT, ServerMessage, Mode, TimeLimit, NEW_BLANK_POINT, POINT_TYPES, EmptyListMessage };
+export { AUTHORIZATION, API_POINT, ServerMessage, Mode, TimeLimit, NEW_BLANK_POINT, POINT_TYPES };
 export type { Method };

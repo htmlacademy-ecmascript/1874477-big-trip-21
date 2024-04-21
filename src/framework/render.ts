@@ -1,17 +1,10 @@
 import AbstractView from './view/abstract-view';
 
-const enum RenderPosition {
-	BEFOREBEGIN = 'beforebegin',
-	AFTERBEGIN = 'afterbegin',
-	BEFOREEND = 'beforeend',
-	AFTEREND = 'afterend',
-}
-
 function createElement<El extends Element = HTMLDivElement>(template: string) {
-  const newElement = document.createElement('div');
+  const newElement = document.createElement('template');
   newElement.innerHTML = template;
 
-  return newElement.firstElementChild as El;
+  return newElement.content.firstElementChild as El;
 }
 
 function render(component: AbstractView<Element>, container: HTMLElement, place: InsertPosition = 'beforeend') {
@@ -32,16 +25,8 @@ function replace(newComponent: AbstractView<Element>, oldComponent: AbstractView
 }
 
 function remove(component: AbstractView<Element>) {
-  if (component === null) {
-    return;
-  }
-
-  if (!(component instanceof AbstractView)) {
-    throw new Error('Can remove only components');
-  }
-
   component.element.remove();
   component.removeElement();
 }
 
-export {RenderPosition, createElement, render, replace, remove};
+export { createElement, render, replace, remove};

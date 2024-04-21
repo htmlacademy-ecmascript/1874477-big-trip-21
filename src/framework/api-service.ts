@@ -10,10 +10,7 @@ interface ApiConfig {
 export default class ApiService {
   _endPoint: string;
   _authorization: string;
-  /**
-   * @param {string} endPoint Адрес сервера
-   * @param {string} authorization Авторизационный токен
-   */
+
   constructor(endPoint: string, authorization: string) {
     this._endPoint = endPoint;
     this._authorization = authorization;
