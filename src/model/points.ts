@@ -25,13 +25,9 @@ export default class PointsModel extends Observable {
     this.#points = serverPoints.map(this.#adaptToClient);
   }
 
-  notifySuccessLoad() {
-    this._notify('INIT');
-  }
+  notifySuccessLoad = () => this._notify('INIT');
 
-  notifyFailLoad() {
-    this._notify('INIT_FAIL');
-  }
+  notifyFailLoad = () => this._notify('INIT_FAIL');
 
   async updatePoint(updateType: UpdateType, update: Point): Promise<Point> {
     const index = this.#points.findIndex((point) => point.id === update.id);

@@ -17,11 +17,7 @@ const offersModel = new OffersModel({ offersApiService: new OffersApiService(API
 const destinationsModel = new DestinationsModel({ destinationsApiService: new DestinationsApiService(API_POINT, AUTHORIZATION) });
 const filterModel = new FilterModel();
 
-Promise.all([offersModel.init(), destinationsModel.init(), pointsModel.init()]).then(() => {
-  pointsModel.notifySuccessLoad();
-}, () => {
-  pointsModel.notifyFailLoad();
-});
+Promise.all([offersModel.init(), destinationsModel.init(), pointsModel.init()]).then(pointsModel.notifySuccessLoad, pointsModel.notifyFailLoad);
 
 const filterPresenter = new FilterPresenter({
   filterContainer: infoContainer,
